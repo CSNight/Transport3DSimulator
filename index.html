@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>Transport3DSimulator</title>
+    <link rel="stylesheet" type="text/css" href="./css/font.css">
+    <link href="3d_libs/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <link rel="stylesheet" href="js_libs/supermap-libs/iclient9-leaflet.css"/>
+    <script type="text/javascript" include="elasticsearch,jq-nicescroll,dtree"
+            src="js_libs/third-js-libs/include-trdlibs.js"></script>
+    <script type="text/javascript" src="js_libs/base-libs/require.min.js"></script>
+    <script src="busi_libs/utils/UrlConfig.js"></script>
+</head>
+<body class="loading">
+<div class="map-container">
+    <!-- 地图 -->
+    <div id="cesiumContainer" class="scene-main"></div>
+    <div id="map" class="map-main"></div>
+    <div class="rtop-tool">
+        <ul>
+            <li class="layer"><a class="rtop-t01" href="javascript:"></a></li>
+            <li class="data"><a class="rtop-t03" href="javascript:"></a></li>
+            <li class="manage"><a class="rtop-t02" href="javascript:"></a></li>
+            <li><a class="rtop-t04" href="javascript:"></a></li>
+            <li><a class="rtop-t05" href="javascript:"></a></li>
+            <li class="home"><a class="rtop-t06" href="javascript:"></a></li>
+            <li><a class="rtop-t07" href="javascript:"></a></li>
+            <li><a class="rtop-t08" href="javascript:"></a></li>
+        </ul>
+    </div>
+    <!-- 底部导航 -->
+
+    <!-- 数据面板 -->
+    <div class="data-panel">
+        <div class="data-tab"></div>
+        <div class="data-inf"></div>
+        <div class="data-bot"></div>
+    </div>
+    <div id="toolbar" class="tool-panel param-container tool-bar">
+        <table>
+            <tbody>
+            <tr>
+                <td>亮度</td>
+                <td>
+                    <input type="range" min="0" max="3" step="0.02" data-bind="value: brightness, valueUpdate: 'input'">
+                </td>
+            </tr>
+            <tr>
+                <td>对比度</td>
+                <td>
+                    <input type="range" min="0" max="3" step="0.02" data-bind="value: contrast, valueUpdate: 'input'">
+                </td>
+            </tr>
+            <tr>
+                <td>色调</td>
+                <td>
+                    <input type="range" min="0" max="3" step="0.02" data-bind="value: hue, valueUpdate: 'input'">
+                </td>
+            </tr>
+            <tr>
+                <td>饱和度</td>
+                <td>
+                    <input type="range" min="0" max="3" step="0.02" data-bind="value: saturation, valueUpdate: 'input'">
+                </td>
+            </tr>
+            <tr>
+                <td>伽马</td>
+                <td>
+                    <input type="range" min="0" max="3" step="0.02" data-bind="value: gamma, valueUpdate: 'input'">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- 图层tree -->
+    <div class="layer-panel">
+        <div class="layer-tree" id="layer-tree"></div>
+    </div>
+    <!-- 左侧面板 -->
+    <div class="left-panel" style="display:none"></div>
+</div>
+<script>
+    globalScene = {};
+    require(["Timer", 'iclient-leaflet', "ControlCenter"], function () {
+
+    });
+</script>
+</body>
+</html>

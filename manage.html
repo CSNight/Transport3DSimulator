@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>仿真文件管理</title>
+    <script src="js_libs/third-js-libs/include-trdlibs.js" include="metro.v4,jq-dateTables"
+            excepts="leaflet"></script>
+</head>
+<body class="bg-dark">
+
+<form class="login-form bg-white p-6 mx-auto border bd-default win-shadow w-35"
+      data-role="validator"
+      action="javascript:"
+      data-clear-invalid="2000"
+      data-on-validate-form="validateForm">
+    <span class="mif-vpn-lock mif-4x place-right" style="margin-top: -10px;"></span>
+    <h2 class="text-light">上传仿真数据文件</h2>
+    <hr class="thin mt-4 mb-4 bg-white">
+    <div class="form-group">
+        <input id="file_up" type="file" accept=".csv" data-prepend="<span class='mif-file-text'>" data-role="file"
+               data-caption="选择数据文件" class="mt-2">
+        <div id="progress" data-role="progress" class="mt-4" data-caption="上传进度" data-value="0"></div>
+    </div>
+    <div class="form-group">
+        <input id="keyword" type="text" data-role="input" data-prepend="<span class='mif-key'>"
+               placeholder="数据文件关键词，禁用特殊符号及空格，格式 时间—地点-附加内容" data-validate="required maxlength=500">
+    </div>
+    <div class="form-group">
+        <textarea id="data_info" data-role="textarea" data-auto-size="true" data-prepend="<span class='mif-info'>"
+                  data-max-height="200" placeholder="数据文件详细描述,格式：20181102——具体描述"></textarea>
+    </div>
+    <div class="form-group">
+        <a id="info" style="color:red"></a>
+    </div>
+    <div class="form-group mt-5">
+        <button id="submit" class="button">提交</button>
+    </div>
+</form>
+<div class="w-75 pos-bottom-center">
+    <table style="text-align: center" id="file_list" class="data_list fg-white"></table>
+</div>
+<div class="pos-absolute w-100 h-100 loading" style="left:0px;top:0px;background-color:#000;opacity:0.5;display: none">
+    <div class="pos-absolute pos-center bg-black fg-white" id="loading"><img style="width: 50px;height: 50px"
+                                                                             src="images/1352886927_7549.gif"/>正在处理。。。请勿进行其他操作或关闭页面
+    </div>
+</div>
+<script src="busi_libs/plugins/ManageSimFile.js"></script>
+</body>
+</html>
