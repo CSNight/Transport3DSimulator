@@ -126,7 +126,7 @@ define(function () {
             this.running = true;
 
             function delayExecute(listeners) {
-                dispatchListener(listeners, timerEvent);
+                dispatchListener(listeners, timerCompleteEvent);
                 timerThis.currentCount++;
                 if (timerThis.currentCount < timerThis.repeatCount) {
                     if (timerThis.running) {

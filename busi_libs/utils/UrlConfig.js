@@ -15,7 +15,7 @@ var Config = {
                 "sfy": {
                     name: "索菲亚大教堂",
                     res: './images/sfy.png',
-                    pos: {x: 0, y: 0, z: 0}//{x: 126.620994, y: 45.768271, z: 100}
+                    pos: {x: 126.620994, y: 45.768271, z: 100}//{x: 0, y: 0, z: 0}
                 }
             }
         }
@@ -25,7 +25,7 @@ var Config = {
     "CarModelUrls": [
         './resource/qiche1.s3m', './resource/qiche2.s3m', './resource/qiche3.s3m', './resource/qiche4.s3m', './resource/qiche5.s3m', './resource/qiche6.s3m',
         './resource/qiche7.s3m', './resource/qiche8.s3m', './resource/qiche9.s3m', './resource/qiche10.s3m', './resource/qiche11.s3m', './resource/qiche12.s3m',
-        './resource/qiche13.s3m', './resource/qiche14.s3m', './resource/qiche15.s3m', './resource/qiche16.s3m','./resource/下车红.s3m','./resource/上车蓝.s3m'
+        './resource/qiche13.s3m', './resource/qiche14.s3m', './resource/qiche15.s3m', './resource/qiche16.s3m'
     ],
     "ModelsScp": {
         "ComponentGJCZ": "公交车站",

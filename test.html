@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="3d_libs/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <link rel="stylesheet" href="js_libs/supermap-libs/iclient9-leaflet.css"/>
+    <script type="text/javascript" include="three"
+            src="js_libs/third-js-libs/include-trdlibs.js"></script>
+    <script type="text/javascript" src="js_libs/base-libs/require.min.js"></script>
+    <script src="busi_libs/utils/UrlConfig.js"></script>
+    <style>
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+            padding: 0;
+            background: #000;
+        }
+
+        #cesiumContainer{
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+            padding: 0;
+            font-family: sans-serif;
+        }
+
+        #ThreeContainer{
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+            padding: 0;
+            font-family: sans-serif;
+            pointer-events:none;
+        }
+
+        .fullWindow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+            padding: 0;
+            font-family: sans-serif;
+        }
+
+
+    </style>
+</head>
+<body>
+<div id="cesiumContainer" class="scene-main"></div>
+<div id="ThreeContainer" class="scene-main" style="position: absolute;top:0px"></div>
+<script>
+    globalScene = {};
+    require(['Cesium', 'Zlib', 'iclient-leaflet'], function () {
+        initCesium();
+        var container;
+        var camera, scene, renderer;
+        init();
+        animate();
+        function init() {
+            container = document.getElementById( 'ThreeContainer' );
+            camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 15000 );
+            camera.position.z = 250;
+            // scene
+            scene = new THREE.Scene();
+            // lensflares
+            var textureLoader = new THREE.TextureLoader();
+            var textureFlare0 = textureLoader.load( 'images/lensflare0_alpha.png' );
+            var textureFlare3 = textureLoader.load( 'images/lensflare3.png' );
+
+            addLight( 0.08, 0.8, 0.5, 0, 0, 100);
+            function addLight( h, s, l, x, y, z ) {
+                var light = new THREE.PointLight( 0xffffff, 1.5, 1000 );
+                light.color.setHSL( h, s, l );
+                light.position.set( x, y, z );
+                scene.add( light );
+                var lensflare = new THREE.Lensflare();
+                lensflare.addElement( new THREE.LensflareElement( textureFlare0, 40, 0 ) );
+                lensflare.addElement( new THREE.LensflareElement( textureFlare0, 60, 0.6 ) );
+                lensflare.addElement( new THREE.LensflareElement( textureFlare0, 70, 0.7 ) );
+                lensflare.addElement( new THREE.LensflareElement( textureFlare0, 60, 0.9 ) );
+                lensflare.addElement( new THREE.LensflareElement( textureFlare0, 70, 1 ) );
+                light.add( lensflare );
+
+            }
+            // renderer
+            renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
+            renderer.setPixelRatio( window.devicePixelRatio );
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            container.appendChild( renderer.domElement );
+            renderer.gammaInput = true;
+            renderer.gammaOutput = true;
+        }
+        function animate() {
+            requestAnimationFrame( animate );
+            render();
+        }
+        function render() {
+            renderer.render( scene, camera );
+        }
+
+
+    });
+</script>
+</body>
+</html>

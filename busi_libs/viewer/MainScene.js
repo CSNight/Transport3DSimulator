@@ -26,30 +26,15 @@ define(function (require) {
                         });
                         var carDynamiclayer = new Cesium.DynamicLayer3D(scene.context, Config.CarModelUrls);
                         scene.primitives.add(carDynamiclayer);
-                        // viewer.entities.add({
-                        //     position: Cesium.Cartesian3.fromDegrees(126.620994, 45.768271, 100),
-                        //     billboard: new Cesium.BillboardGraphics({
-                        //         image:"./resource/flare-r.png",
-                        //         width:30,
-                        //         height:30,
-                        //         color:new Cesium.Color(1, 1, 1, 1)
-                        //     })
-                        // });
-                        carDynamiclayer.updateInterval = 1500;
-                        carDynamiclayer.updateObjectWithModel("./resource/下车红.s3m", [new Cesium.DynamicObjectState({
-                            longitude: 0 + 0.0001,
-                            latitude: 0,
-                            altitude: 10,
-                            scale: new Cesium.Cartesian3(1, 1, 1),
-                            id: 0
-                        })]);
-                        carDynamiclayer.updateObjectWithModel("./resource/上车蓝.s3m", [new Cesium.DynamicObjectState({
-                            longitude: 0 + 0.00014,
-                            latitude: 0,
-                            altitude: 10,
-                            scale: new Cesium.Cartesian3(1, 1, 1),
-                            id: 1
-                        })]);
+                        viewer.entities.add({
+                            position: Cesium.Cartesian3.fromDegrees(126.620994, 45.768271, 100),
+                            billboard: new Cesium.BillboardGraphics({
+                                image:"images/lensflare_alpha_r.png",
+                                width:100,
+                                height:100,
+                                color:new Cesium.Color(1, 1, 1, 1)
+                            })
+                        });
                         globalScene = {
                             Viewer: viewer,
                             carDynamicLayer: carDynamiclayer,
@@ -60,57 +45,7 @@ define(function (require) {
                             baseMap: null,
                             focus: -1
                         };
-                        var viewModel = {
-                            brightness: 0,
-                            contrast: 0,
-                            hue: 0,
-                            saturation: 0,
-                            gamma: 0
-                        };
-                        // Convert the viewModel members into knockout observables.
-                        Cesium.knockout.track(viewModel);
-                        // Bind the viewModel to the DOM elements of the UI that call for it.
-                        var toolbar = document.getElementById('toolbar');
-                        Cesium.knockout.applyBindings(viewModel, toolbar);
-
-                        // ake the active imagery layer a subscriber of the viewModel.
-                        function subscribeLayerParameter(name) {
-                            Cesium.knockout.getObservable(viewModel, name).subscribe(
-                                function (newValue) {
-                                    if (viewer.imageryLayers.length > 1) {
-                                        for (var i = 0; i < viewer.imageryLayers.length; i++) {
-                                            var layer = viewer.imageryLayers.get(i);
-                                            layer[name] = newValue;
-                                        }
-                                    }
-                                }
-                            );
-                        }
-
-                        subscribeLayerParameter('brightness');
-                        subscribeLayerParameter('contrast');
-                        subscribeLayerParameter('hue');
-                        subscribeLayerParameter('saturation');
-                        subscribeLayerParameter('gamma');
-
-                        // Make the viewModel react to base layer changes.
-                        function updateViewModel() {
-                            if (viewer.imageryLayers.length > 1) {
-                                for (var i = 0; i < viewer.imageryLayers.length; i++) {
-                                    var layer = viewer.imageryLayers.get(i);
-                                    viewModel.brightness = layer.brightness;
-                                    viewModel.contrast = layer.contrast;
-                                    viewModel.hue = layer.hue;
-                                    viewModel.saturation = layer.saturation;
-                                    viewModel.gamma = layer.gamma;
-                                }
-                            }
-                        }
-
-                        updateViewModel();
-                        viewer.imageryLayers.layerAdded.addEventListener(updateViewModel);
-                        viewer.imageryLayers.layerRemoved.addEventListener(updateViewModel);
-                        viewer.imageryLayers.layerMoved.addEventListener(updateViewModel);
+                        toolbar(viewer);
                         var ToolBar = require('busi_libs/plugins/ToolBar');
                         var BottomNav = require('busi_libs/plugins/BottomNav');
                         ToolBar.init();
@@ -134,6 +69,59 @@ define(function (require) {
             }
         }
     };
+    function toolbar(viewer) {
+        var viewModel = {
+            brightness: 0,
+            contrast: 0,
+            hue: 0,
+            saturation: 0,
+            gamma: 0
+        };
+        // Convert the viewModel members into knockout observables.
+        Cesium.knockout.track(viewModel);
+        // Bind the viewModel to the DOM elements of the UI that call for it.
+        var toolbar = document.getElementById('toolbar');
+        Cesium.knockout.applyBindings(viewModel, toolbar);
+
+        // ake the active imagery layer a subscriber of the viewModel.
+        function subscribeLayerParameter(name) {
+            Cesium.knockout.getObservable(viewModel, name).subscribe(
+                function (newValue) {
+                    if (viewer.imageryLayers.length > 1) {
+                        for (var i = 0; i < viewer.imageryLayers.length; i++) {
+                            var layer = viewer.imageryLayers.get(i);
+                            layer[name] = newValue;
+                        }
+                    }
+                }
+            );
+        }
+
+        subscribeLayerParameter('brightness');
+        subscribeLayerParameter('contrast');
+        subscribeLayerParameter('hue');
+        subscribeLayerParameter('saturation');
+        subscribeLayerParameter('gamma');
+
+        // Make the viewModel react to base layer changes.
+        function updateViewModel() {
+            if (viewer.imageryLayers.length > 1) {
+                for (var i = 0; i < viewer.imageryLayers.length; i++) {
+                    var layer = viewer.imageryLayers.get(i);
+                    viewModel.brightness = layer.brightness;
+                    viewModel.contrast = layer.contrast;
+                    viewModel.hue = layer.hue;
+                    viewModel.saturation = layer.saturation;
+                    viewModel.gamma = layer.gamma;
+                }
+            }
+        }
+        updateViewModel();
+        viewer.imageryLayers.layerAdded.addEventListener(updateViewModel);
+        viewer.imageryLayers.layerRemoved.addEventListener(updateViewModel);
+        viewer.imageryLayers.layerMoved.addEventListener(updateViewModel);
+    }
+
     var addLayers = function (urls) {
         for (var i = 0; i < urls.length; i++) {
             var url = urls[i];
@@ -145,6 +133,7 @@ define(function (require) {
             }
         }
     };
+
     var removeLayers = function (urls) {
         for (var i = 0; i < urls.length; i++) {
             var url = urls[i];
@@ -154,6 +143,7 @@ define(function (require) {
             }
         }
     };
+
     var switchBaseMap = function (isShow, base_type) {
         if (isShow) {
             var imageryProvider = null;
@@ -265,6 +255,7 @@ define(function (require) {
         //var bounds = new Cesium.Rectangle(west, south, east, north);
         globalScene.Viewer.scene.camera.flyTo({destination: bounds});
     };
+
     var flyToHome = function (seconds) {
         if (seconds) {
             globalScene.Viewer.scene.camera.flyHome(seconds);
@@ -273,6 +264,7 @@ define(function (require) {
             globalScene.Viewer.scene.camera.flyHome();
         }
     };
+
     var sceneEventRegister = function (event_type, func) {
         var handler = new Cesium.ScreenSpaceEventHandler(screen.canvas);
         //click

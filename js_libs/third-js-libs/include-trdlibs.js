@@ -28,6 +28,10 @@
     function inArray(arr) {
         for (var index in arr) {
             switch (arr[index]) {
+                case 'three':
+                    inputScript('three/three.js');
+                    inputScript('three/Lensflare.js');
+                    break;
                 case 'mapv':
                     inputScript('mapv/mapv.min.js');
                     break;
