@@ -26,15 +26,6 @@ define(function (require) {
                         });
                         var carDynamiclayer = new Cesium.DynamicLayer3D(scene.context, Config.CarModelUrls);
                         scene.primitives.add(carDynamiclayer);
-                        viewer.entities.add({
-                            position: Cesium.Cartesian3.fromDegrees(126.620994, 45.768271, 100),
-                            billboard: new Cesium.BillboardGraphics({
-                                image:"images/lensflare_alpha_r.png",
-                                width:100,
-                                height:100,
-                                color:new Cesium.Color(1, 1, 1, 1)
-                            })
-                        });
                         globalScene = {
                             Viewer: viewer,
                             carDynamicLayer: carDynamiclayer,
@@ -43,7 +34,8 @@ define(function (require) {
                             LayerDic: {},
                             models: {},
                             baseMap: null,
-                            focus: -1
+                            Lights_on: true,
+                            Pop_on:false
                         };
                         toolbar(viewer);
                         var ToolBar = require('busi_libs/plugins/ToolBar');

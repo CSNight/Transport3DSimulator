@@ -1854,6 +1854,10 @@ define('Renderer/Framebuffer', function() {
     return Cesium['Framebuffer'];
 });
 
+define('Renderer/FrameBufferType', function() {
+    return Cesium['FrameBufferType'];
+});
+
 define('Renderer/freezeRenderState', function() {
     return Cesium['freezeRenderState'];
 });
@@ -1896,6 +1900,10 @@ define('Renderer/PickFramebuffer', function() {
 
 define('Renderer/PixelDatatype', function() {
     return Cesium['PixelDatatype'];
+});
+
+define('Renderer/PostEffectFilterlFramebuffer', function() {
+    return Cesium['PostEffectFilterlFramebuffer'];
 });
 
 define('Renderer/Profile', function() {
@@ -2022,6 +2030,10 @@ define('S3MTiles/Enum/DataFileType', function() {
     return Cesium['DataFileType'];
 });
 
+define('S3MTiles/Enum/InstancedType', function() {
+    return Cesium['InstancedType'];
+});
+
 define('S3MTiles/Enum/InstanceMode', function() {
     return Cesium['InstanceMode'];
 });
@@ -2038,12 +2050,24 @@ define('S3MTiles/Enum/ObjsOperationType', function() {
     return Cesium['ObjsOperationType'];
 });
 
+define('S3MTiles/Enum/PBRMaterialType', function() {
+    return Cesium['PBRMaterialType'];
+});
+
 define('S3MTiles/Enum/ProgramDefines', function() {
     return Cesium['ProgramDefines'];
 });
 
 define('S3MTiles/Enum/RangeMode', function() {
     return Cesium['RangeMode'];
+});
+
+define('S3MTiles/Enum/S3MCompressType', function() {
+    return Cesium['S3MCompressType'];
+});
+
+define('S3MTiles/Enum/S3MPixelFormat', function() {
+    return Cesium['S3MPixelFormat'];
 });
 
 define('S3MTiles/Enum/S3MVersion', function() {
@@ -2086,6 +2110,10 @@ define('S3MTiles/S3MBDataParser', function() {
     return Cesium['S3MBDataParser'];
 });
 
+define('S3MTiles/S3MBloomEffect', function() {
+    return Cesium['S3MBloomEffect'];
+});
+
 define('S3MTiles/S3MCreateIndexJob', function() {
     return Cesium['S3MCreateIndexJob'];
 });
@@ -2112,6 +2140,10 @@ define('S3MTiles/S3MInstanceCollection', function() {
 
 define('S3MTiles/S3MLayerScheduler', function() {
     return Cesium['S3MLayerScheduler'];
+});
+
+define('S3MTiles/S3MPBRMaterialLib', function() {
+    return Cesium['S3MPBRMaterialLib'];
 });
 
 define('S3MTiles/S3MPolylineEffect', function() {
@@ -3516,6 +3548,10 @@ define('Shaders/Builtin/Functions/RGBToHSL', function() {
 
 define('Shaders/Builtin/Functions/RGBToXYZ', function() {
     return Cesium['RGBToXYZ'];
+});
+
+define('Shaders/Builtin/Functions/S3MPBR', function() {
+    return Cesium['S3MPBR'];
 });
 
 define('Shaders/Builtin/Functions/saturation', function() {

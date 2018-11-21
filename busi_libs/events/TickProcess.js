@@ -22,9 +22,36 @@ define(function (require) {
                 var st = globalScene.SIM_CAR_LIST.get(i).obj_state;
                 urls[globalScene.SIM_CAR_LIST.get(i).url].push(st);
             }
+
             for (var key in urls) {
                 globalScene.carDynamicLayer.updateObjectWithModel(key, urls[key]);
             }
+            if(globalScene.Pop_on){
+                for (var i = 0; i < globalScene.SIM_CAR_LIST.size(); i++) {
+                    globalScene.Viewer.entities.removeById(globalScene.SIM_CAR_LIST.get(i).car_id);
+                }
+                for (var i = 0; i < globalScene.SIM_CAR_LIST.size(); i++) {
+                    var car_model=globalScene.SIM_CAR_LIST.get(i);
+                    globalScene.Viewer.entities.add({
+                        id: car_model.car_id,
+                        position: Cesium.Cartesian3.fromDegrees(car_model.pos.x, car_model.pos.y, car_model.pos.z + 10),
+                        label: {
+                            text: 'Mod'+BASE.base64decode(car_model.info.car_id),
+                            font: '15px Helvetica',
+                            fillColor: Cesium.Color.RED,
+                            outlineColor: Cesium.Color.RED,
+                            outlineWidth: 1,
+                            distanceDisplayCondition: 'm',
+                            style: Cesium.LabelStyle.FILL_AND_OUTLINE
+                        }
+                    });
+                }
+            }else {
+                for (var i = 0; i < globalScene.SIM_CAR_LIST.size(); i++) {
+                    globalScene.Viewer.entities.removeById(globalScene.SIM_CAR_LIST.get(i).car_id);
+                }
+            }
+
         }, function (error) {
             console.log(error);
         })
@@ -45,7 +72,8 @@ define(function (require) {
                 car_stat.count_n = car_stat.count_n + 1;
             } else {
                 var car_index = globalScene.SIM_CAR_LIST.indexOfKey("car_id", _source.car_id);
-                globalScene.SIM_CAR_LIST.get(car_index).updateInfo(_source);
+                var car_model=globalScene.SIM_CAR_LIST.get(car_index);
+                car_model.updateInfo(_source);
                 if (car_index < 0) {
                     alert(_source.car_id);
                 }
@@ -57,13 +85,12 @@ define(function (require) {
         var dif = globalScene.SIM_CAR_LIST.diff(es_json, "car_id", "_source");
         car_stat.count_d = dif.length;
         dif.forEach(function (cur) {
-            if (globalScene.focus === cur && globalScene.Interval) {
-                clearInterval(globalScene.Interval);
-                globalScene.focus = -1;
-            }
-            globalScene.carDynamicLayer.clear(globalScene.SIM_CAR_LIST.get(cur).url, globalScene.SIM_CAR_LIST.get(cur).car_id);
-            CarListPlugin.sim_remove(globalScene.SIM_CAR_LIST.get(cur));
-            globalScene.SIM_CAR_LIST.removeAt(cur);
+            var index=globalScene.SIM_CAR_LIST.indexOfKey("car_id",cur);
+            var car_mo=globalScene.SIM_CAR_LIST.get(index);
+            globalScene.carDynamicLayer.deleteObjects(car_mo.url, [cur]);
+            CarListPlugin.sim_remove(car_mo);
+            globalScene.Viewer.entities.removeById(car_mo.car_id);
+            globalScene.SIM_CAR_LIST.removeAt(index);
         });
         return car_stat;
     };

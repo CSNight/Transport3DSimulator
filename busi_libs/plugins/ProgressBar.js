@@ -78,7 +78,7 @@ define(function (require) {
     };
     var start = function () {
         if (globalScene.globalTimer.currentCount === 0) {
-            globalScene.carDynamicLayer.clearAll();
+            globalScene.carDynamicLayer.deleteAllObjects();
             CarListPlugin.clear();
             if (globalScene.Interval) {
                 globalScene.carDynamicLayer.setUnSelected();
@@ -118,7 +118,7 @@ define(function (require) {
     var reset = function () {
         var isCleanScene = arguments[0] ? arguments[0] : true;
         if (isCleanScene) {
-            globalScene.carDynamicLayer.clearAll();
+            globalScene.carDynamicLayer.deleteAllObjects();
             CarListPlugin.clear();
         }
         if (globalScene.Interval) {

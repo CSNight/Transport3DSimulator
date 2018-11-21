@@ -32,10 +32,7 @@ define(function (require) {
             //     });
             // }, 100);
         } else {
-            globalScene.carDynamicLayer.setUnSelected();
-            clearInterval(globalScene.Interval);
-            globalScene.Interval = undefined;
-            globalScene.focus = -1;
+            //globalScene.carDynamicLayer.setUnSelected();
             $('.lpi-box').removeClass('active');
             $('.lpi-box').show();
             $('.lp-select').html('');

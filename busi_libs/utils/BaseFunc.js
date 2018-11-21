@@ -251,7 +251,7 @@ define(function () {
                 var diff_cur = [];
                 for (var v = 0; v < this$1.array_.length; v++) {
                     if (arr_tmp.indexOf(this$1.array_[v][k]) < 0) {
-                        diff_cur.push(v);
+                        diff_cur.push(this$1.array_[v][k]);
                     }
                 }
                 return diff_cur;

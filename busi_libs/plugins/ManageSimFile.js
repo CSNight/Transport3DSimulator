@@ -9,6 +9,7 @@ function validateForm() {
         $('.login-form').removeClass("disabled");
         progress.val(0);
         $(".login-form")[0].reset();
+        $('.loading').hide();
         return "";
     }
     buttonUpload(csv_file, function () {

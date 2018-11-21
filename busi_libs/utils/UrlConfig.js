@@ -47,7 +47,7 @@ var Config = {
 };
 require.config({
     baseUrl: '',
-    waitSeconds: 600,
+    waitSeconds: 0,
     paths: {
         'Cesium': '3d_libs/Cesium/Cesium',
         'Zlib': '3d_libs/Cesium/Workers/zlib.min',

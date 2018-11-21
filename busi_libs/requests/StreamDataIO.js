@@ -42,7 +42,7 @@ define(function (require) {
                 $('.lp-info').html('');
                 $('.lp-select').html('');
                 globalScene.carDynamicLayer.setUnSelected();
-                globalScene.carDynamicLayer.clearAll();
+                globalScene.carDynamicLayer.deleteAllObjects();
                 globalScene.STREAM_CAR_LIST = {};
                 globalScene.globalTimer.start();
 

@@ -90,6 +90,8 @@ define(function (require) {
                 globalScene.globalTimer.start_timestamp = BASE.DateToTimestamp(res["op_time"], res["start_time"] - 1);
                 globalScene.globalTimer.addEventListener('timer', TickProcess.TickFrameEvent);
                 var datestr=eval("("+result.request.params+")").file_name.split("_")[1];
+                var Lights = require('busi_libs/requests/LightVectorRequest');
+                Lights.query(datestr);
                 ProgressBar.init(BASE.DateToTimestamp(datestr.substring(0, 4) + "-" + datestr.substring(4, 6) + "-" + datestr.substring(6, 8), +28800));
             }
         }

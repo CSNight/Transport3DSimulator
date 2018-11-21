@@ -44,7 +44,7 @@ define(function (require) {
                 latitude: info.y,
                 altitude: info.z + 3,
                 scale: new Cesium.Cartesian3(1, 1, 1),
-                // heading: (360 - info.direction + 180) / 180 * Math.PI,
+                startDirection: info.direction/ 180 * Math.PI-Math.PI/2,
                 id: info.car_id,
                 description: info
             }),
@@ -114,10 +114,13 @@ define(function (require) {
                 latitude: info.y,
                 altitude: info.z + 3,
                 scale: new Cesium.Cartesian3(1, 1, 1),
-                //heading: (360 - info.direction) / 180 * Math.PI,
+
                 id: info.car_id,
                 description: info
             });
+            // if (carThis.node_index.length === 2) {
+            //     carThis.obj_state['heading'] = info.direction / 180 * Math.PI;
+            // }
         }, getCarInfo: function () {
             var carThis = this;
 
