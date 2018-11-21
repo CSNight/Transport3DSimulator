@@ -31,6 +31,11 @@ define(function (require) {
         listenerMap[LightModelPositionChangedEvent.changed] = [];
         BASE.extend(this, {
             light_id: info.light_id,
+            cross_id: info.cross_id,
+            is_open: info.is_open,
+            ct: info.ct,
+            model_id: info.model_id,
+            model_type: info.model_type,
             green: {
                 interval: 0,
                 pos: info.green_geo,
@@ -88,51 +93,67 @@ define(function (require) {
                     })
                 }
             },
+            cycle:info.cycle,
             stopwatch: new Stopwatch(),
+            init_phase:info.current_phase,
             current_phase: info.current_phase,
             current_id: "",
+            timer:null,
             handler: listenerMap
         });
         var lightThis = this;
-
+        var init_color=get_color(lightThis.current_phase);
+        lightThis[init_color].interval=lightThis.cycle[lightThis.current_phase];
+        var current_entity=lightThis[init_color].entity;
+        if(lightThis[init_color].interval!==0) {
+            globalScene.Viewer.entities.add(current_entity);
+            lightThis.current_id = current_entity.id;
+        }
+        lightThis.timer=new Timer(lightThis[init_color].interval*1000,1);
+        function recursion(e) {
+            if (lightThis.current_id !== "") {
+                globalScene.Viewer.entities.removeById(lightThis.current_id);
+            }
+            lightThis.current_phase = get_phase(lightThis.current_phase);
+            var next_color = get_color(lightThis.current_phase);
+            lightThis[next_color].interval = lightThis.cycle[lightThis.current_phase];
+            var next_entity = lightThis[next_color].entity;
+            if (lightThis[next_color].interval !== 0) {
+                globalScene.Viewer.entities.add(next_entity);
+                lightThis.current_id = next_entity.id;
+            }
+            lightThis.timer = new Timer(lightThis[next_color].interval * 1000, 1);
+            lightThis.timer.addEventListener('timerComplete', recursion);
+            lightThis.timer.start();
+        }
+        lightThis.timer.addEventListener('timerComplete',recursion);
         this.stopwatch.start();
     };
 
-    function get_next(current_phase) {
+    function get_color(current_phase) {
         switch (current_phase) {
-            case"green":
-                return "yellow";
-            case"yellow":
-                return "red";
-            case"red":
+            case"P1":
                 return "green";
+            case"P2":
+                return "yellow";
+            case"P3":
+            case"P4":
+            case"P5":
+            case"P6":
+            case"P7":
+            case"P8":
+            case"P9":
+            case"P10":
+            case"P11":
+            case"P12":
+                return "red";
         }
     }
 
     function get_phase(current_phase) {
-        var next_phase = "";
-        switch (current_phase) {
-            case"1":
-                next_phase = "2";
-                break;
-            case"2":
-                next_phase = "3";
-                break;
-            case"3":
-                next_phase = "4";
-                break;
-            case"4":
-                next_phase = "5";
-                break;
-        }
-        var phase_color = {
-            "1": "green",
-            "2": "yellow",
-            "3": "red",
-            "4": "red",
-            "5": "red"
-        };
-        return phase_color[next_phase];
+        var tmp = current_phase.substring(1);
+        var index = parseInt(tmp) === 12 ? 1 : parseInt(tmp) + 1;
+        return "P" + index;
     }
 
     BASE.extend(LightModel.prototype, {
