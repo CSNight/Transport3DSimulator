@@ -77,53 +77,83 @@ define(function (require) {
         });
     };
     var start = function () {
+        //第一次运行
         if (globalScene.globalTimer.currentCount === 0) {
-            globalScene.carDynamicLayer.deleteAllObjects();
+            //清空图层
+            globalScene.carDynamicLayer.clearAllState();
+            globalScene.carDynamicLayer.setUnSelected();
+            //清空列表
             CarListPlugin.clear();
-            if (globalScene.Interval) {
-                globalScene.carDynamicLayer.setUnSelected();
-                $('.lpib-list').removeClass('active');
-                $('.lp-select').html('');
-                clearInterval(globalScene.Interval);
-                globalScene.Interval = undefined;
-                globalScene.focus = -1;
+            $('.lpib-list').removeClass('active');
+            $('.lp-select').html('');
+            //初始化信号灯并启动
+            globalScene.Viewer.entities.removeAll();
+            for(var i=0;i<globalScene.Lights_List.size();i++){
+                globalScene.Lights_List.get(i).init();
+            }
+            for(var i=0;i<globalScene.Lights_List.size();i++){
+                globalScene.Lights_List.get(i).start();
             }
         }
-        if (globalScene.globalTimer.currentCount === globalScene.globalTimer.total_count) {
+        //运行到末尾重置
+        else if (globalScene.globalTimer.currentCount === globalScene.globalTimer.total_count) {
             reset();
+        }else{
+            //中间暂停后启动信号灯
+            for(var i=0;i<globalScene.Lights_List.size();i++){
+                globalScene.Lights_List.get(i).start();
+            }
         }
         globalScene.globalTimer.start();
         $('#file-sele').attr('disabled', true)
     };
     var stop = function () {
-        if (globalScene.Interval) {
-            clearInterval(globalScene.Interval);
-            globalScene.Interval = undefined;
-            globalScene.focus = -1;
-            globalScene.carDynamicLayer.setUnSelected();
-            $('.lpib-list').removeClass('active');
-            $('.lp-select').html('');
-        }
         globalScene.globalTimer.stop();
         $('#file-sele').attr('disabled', false);
+        for(var i=0;i<globalScene.Lights_List.size();i++){
+            globalScene.Lights_List.get(i).stop();
+        }
     };
     var speed_up = function (factor) {
-        globalScene.globalTimer.delay = INTERVAL / factor;
+        for(var i=0;i<globalScene.Lights_List.size();i++){
+            globalScene.Lights_List.get(i).stop();
+        }
+        globalScene.globalTimer.delay = globalScene.Interval / factor;
+        for(var i=0;i<globalScene.Lights_List.size();i++){
+            globalScene.Lights_List.get(i).start();
+        }
         //globalScene.carDynamicLayer.updateInterval = INTERVAL / factor * 2;
     };
     var speed_down = function (factor) {
-        globalScene.globalTimer.delay = INTERVAL * (1 / factor);
+        for(var i=0;i<globalScene.Lights_List.size();i++){
+            globalScene.Lights_List.get(i).stop();
+        }
+        globalScene.globalTimer.delay = globalScene.Interval * (1 / factor);
         //globalScene.carDynamicLayer.updateInterval = INTERVAL * (1 / factor) * 2;
+        for(var i=0;i<globalScene.Lights_List.size();i++){
+            globalScene.Lights_List.get(i).start();
+        }
     };
     var reset = function () {
         var isCleanScene = arguments[0] ? arguments[0] : true;
+        //停止时重置整个场景
         if (isCleanScene) {
-            globalScene.carDynamicLayer.deleteAllObjects();
+            //初始化场景，重建动态图层
+            globalScene.carDynamicLayer.clearAllState();
             CarListPlugin.clear();
+            for (var i = 0; i < globalScene.Lights_List.size(); i++) {
+                globalScene.Lights_List.get(i).stop();
+            }
+            globalScene.Viewer.entities.removeAll();
         }
-        if (globalScene.Interval) {
-            clearInterval(globalScene.Interval);
-            globalScene.focus = -1;
+        for (var i = 0; i < globalScene.Lights_List.size(); i++) {
+            globalScene.Lights_List.get(i).init();
+        }
+        //全局计时器运行中则启动信号灯
+        if (globalScene.globalTimer.running) {
+            for (var i = 0; i < globalScene.Lights_List.size(); i++) {
+                globalScene.Lights_List.get(i).start();
+            }
         }
         globalScene.globalTimer.reset();
     };

@@ -18,11 +18,6 @@ define(function (require) {
                 $('#' + car_id).hide();
                 $('.clo_sel').show();
             }
-            if (globalScene.Interval) {
-                clearInterval(globalScene.Interval);
-                globalScene.Interval = undefined;
-                globalScene.focus = -1;
-            }
             // globalScene.Interval = setInterval(function flow(pos) {
             //     globalScene.focus = globalScene.SIM_CAR_LIST.indexOfKey('car_id', BASE.base64encode(car_id));
             //     var car_obj = globalScene.SIM_CAR_LIST.get(globalScene.focus);

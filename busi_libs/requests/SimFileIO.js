@@ -38,8 +38,10 @@ define(function (require) {
                     SimFileInfo($('#file-sele')[0].options[index].value);
                 }
             });
-            $("#file-sele").val($('#file-sele')[0].options[0].value);
-            $("#file-sele").trigger('change');
+            if($('#file-sele')[0].options.length!==0){
+                $("#file-sele").val($('#file-sele')[0].options[0].value);
+                $("#file-sele").trigger('change');
+            }
         });
         search.DataREST({
             params: JSON.stringify({
@@ -91,6 +93,7 @@ define(function (require) {
                 globalScene.globalTimer.addEventListener('timer', TickProcess.TickFrameEvent);
                 var datestr=eval("("+result.request.params+")").file_name.split("_")[1];
                 var Lights = require('busi_libs/requests/LightVectorRequest');
+                globalScene.Lights_List=new BASE.List();
                 Lights.query(datestr);
                 ProgressBar.init(BASE.DateToTimestamp(datestr.substring(0, 4) + "-" + datestr.substring(4, 6) + "-" + datestr.substring(6, 8), +28800));
             }

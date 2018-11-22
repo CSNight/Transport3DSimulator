@@ -20,7 +20,7 @@ function validateForm() {
             return "";
         } else {
             $.ajax({
-                url: "http://localhost:8020/TransSimServices/DataProcess",
+                url: Config.DataService+"TransSimServices/DataProcess",
                 type: "GET",
                 data: {params: JSON.stringify({"RqType": "CheckExist", "file_name": csv_file.name})},
                 timeout: 0,
@@ -98,7 +98,7 @@ function getTable() {
 function loadTable() {
     _msfTable.rows().remove().draw();
     $.ajax({
-        url: "http://localhost:8020/TransSimServices/DataProcess",
+        url: Config.DataService+"TransSimServices/DataProcess",
         type: "GET",
         data: {params: JSON.stringify({"RqType": "FindHistory"})},
         timeout: 0,
@@ -140,7 +140,7 @@ function loadTable() {
 
 function ImportToEs(filename, keyword, data_info) {
     $.ajax({
-        url: "http://localhost:8020/TransSimServices/DataProcess",
+        url: Config.DataService+"TransSimServices/DataProcess",
         type: "GET",
         data: {
             params: JSON.stringify({
@@ -174,7 +174,7 @@ function bindEvent() {
     $('.del').click(function () {
         $('.loading').show();
         $.ajax({
-            url: "http://localhost:8020/TransSimServices/DataProcess",
+            url: Config.DataService+"TransSimServices/DataProcess",
             type: "GET",
             data: {
                 params: JSON.stringify({
@@ -255,7 +255,7 @@ function buttonUpload(csv_file, callback) {
             fd.append('filename', csv_file.name);
             fd.append('loaded', startIndex);
             var xhr = new XMLHttpRequest();
-            xhr.open('post', 'http://localhost:8020/TransSimServices/BigSingleFileUploadServlet', true);
+            xhr.open('post', Config.DataService+'TransSimServices/BigSingleFileUploadServlet', true);
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     if (onSuccess)

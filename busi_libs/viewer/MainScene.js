@@ -25,8 +25,10 @@ define(function (require) {
                             }
                         });
                         var carDynamiclayer = new Cesium.DynamicLayer3D(scene.context, Config.CarModelUrls);
-                        scene.primitives.add(carDynamiclayer);
+                        var dynamic=scene.primitives.add(carDynamiclayer);
                         globalScene = {
+                            scene:scene,
+                            primitive_dynamic:dynamic,
                             Viewer: viewer,
                             carDynamicLayer: carDynamiclayer,
                             map: null,
@@ -35,7 +37,8 @@ define(function (require) {
                             models: {},
                             baseMap: null,
                             Lights_on: true,
-                            Pop_on:false
+                            Pop_on:false,
+                            Interval:1000
                         };
                         toolbar(viewer);
                         var ToolBar = require('busi_libs/plugins/ToolBar');

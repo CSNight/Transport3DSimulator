@@ -14,6 +14,7 @@ define(function (require) {
         ES.es_request_func(search, function (es) {
             var stat = parseJsonToCar(es.hits.hits);
             CarListPlugin.statistic(stat.count_n, stat.count_o, stat.count_d);
+            //状态分组更新
             var urls = {};
             for (var i = 0; i < Config.CarModelUrls.length; i++) {
                 urls[Config.CarModelUrls[i]] = [];
@@ -26,6 +27,7 @@ define(function (require) {
             for (var key in urls) {
                 globalScene.carDynamicLayer.updateObjectWithModel(key, urls[key]);
             }
+            //车辆气泡标签控制
             if(globalScene.Pop_on){
                 for (var i = 0; i < globalScene.SIM_CAR_LIST.size(); i++) {
                     globalScene.Viewer.entities.removeById(globalScene.SIM_CAR_LIST.get(i).car_id);
@@ -87,8 +89,9 @@ define(function (require) {
         dif.forEach(function (cur) {
             var index=globalScene.SIM_CAR_LIST.indexOfKey("car_id",cur);
             var car_mo=globalScene.SIM_CAR_LIST.get(index);
-            globalScene.carDynamicLayer.deleteObjects(car_mo.url, [cur]);
+            globalScene.carDynamicLayer.clearState(car_mo.url, [cur]);
             CarListPlugin.sim_remove(car_mo);
+            //删除移除车辆的气泡标签
             globalScene.Viewer.entities.removeById(car_mo.car_id);
             globalScene.SIM_CAR_LIST.removeAt(index);
         });

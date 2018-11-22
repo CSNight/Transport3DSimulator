@@ -31,9 +31,21 @@ define(function (require) {
         }
         var SimFileIO = require('busi_libs/requests/SimFileIO');
         SimFileIO.SimCSVSearch();
+        //启用信号灯check
         $('.lpc-lights').click(function () {
             globalScene.Lights_on = $(this)[0].checked;
+            //实时信号灯控制显隐
+            if(globalScene.Lights_List.size()!==0&&!globalScene.Lights_on){
+                for(var i=0;i<globalScene.Lights_List.size();i++){
+                    globalScene.Viewer.entities.getById(globalScene.Lights_List.get(i).current_id).show=false;
+                }
+            }else if(globalScene.Lights_List.size()!==0&&globalScene.Lights_on){
+                for(var i=0;i<globalScene.Lights_List.size();i++){
+                    globalScene.Viewer.entities.getById(globalScene.Lights_List.get(i).current_id).show=true;
+                }
+            }
         });
+        //启用气泡check
         $('.lpc-pop').click(function () {
             globalScene.Pop_on = $(this)[0].checked;
         });

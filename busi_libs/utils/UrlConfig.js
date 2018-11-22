@@ -1,12 +1,13 @@
 var Config = {
     "bingMap": 'https://dev.virtualearth.net',
     "BING_MAP_KEY": 'ArLWvxLVAh1vxsmDZuOxr94On14sA52a_IPUewEz8H7mm3qDQnjWe-OzJtu1PZpZ',
-    "marbleMap": 'http://localhost:8090/iserver/services/map-BlackMarble/rest/maps/BlackMarble',
-    "vectorMap": "http://localhost:8090/iserver/services/map-ChinaAll/rest/maps/哈尔滨",
+    "marbleMap": 'http://10.1.30.28:8090/iserver/services/map-BlackMarble/rest/maps/BlackMarble',
+    "vectorMap": "http://10.1.30.28:8090/iserver/services/map-ChinaAll/rest/maps/哈尔滨",
+    "lightsData":"http://10.1.30.28:8090/iserver/services/data-LightsVector/rest/data",
     "scenesUrl": {
-        "Base": "http://localhost:8090/iserver/services/3D-DM/rest/realspace",
-        "Component": "http://localhost:8090/iserver/services/3D-Component/rest/realspace",
-        "JZ": "http://localhost:8090/iserver/services/3D-JZ/rest/realspace"
+        "Base": "http://10.1.30.28:8090/iserver/services/3D-DM/rest/realspace",
+        "Component": "http://10.1.30.28:8090/iserver/services/3D-Component/rest/realspace",
+        "JZ": "http://10.1.30.28:8090/iserver/services/3D-JZ/rest/realspace"
     },
     "destination": {
         "MyScene": {
@@ -20,8 +21,8 @@ var Config = {
             }
         }
     },
-    "DataService": "http://localhost:8020/",
-    "ESService": "http://localhost:9200",
+    "DataService": "http://10.1.30.28:8020/",
+    "ESService": "http://10.1.30.28:9200",
     "CarModelUrls": [
         './resource/qiche1.s3m', './resource/qiche2.s3m', './resource/qiche3.s3m', './resource/qiche4.s3m', './resource/qiche5.s3m', './resource/qiche6.s3m',
         './resource/qiche7.s3m', './resource/qiche8.s3m', './resource/qiche9.s3m', './resource/qiche10.s3m', './resource/qiche11.s3m', './resource/qiche12.s3m',
@@ -40,28 +41,6 @@ var Config = {
     },
     <!-- 设置交通路况展现形式，False表示以专题图类型展示，True表示以热度图方式展示 -->
     "IsHeatMap": "True",
-    <!-- 设置红绿灯变化时间间隔，单位为秒 -->
-    "LightChangeTime": "20",
     <!-- 设置动态图层刷新时间间隔，单位为毫秒 -->
     "DynamicLayerUpdateInterval": "500"
 };
-require.config({
-    baseUrl: '',
-    waitSeconds: 0,
-    paths: {
-        'Cesium': '3d_libs/Cesium/Cesium',
-        'Zlib': '3d_libs/Cesium/Workers/zlib.min',
-        'BaseFunc': 'busi_libs/utils/BaseFunc',
-        'Timer': "busi_libs/utils/Timer",
-        'ControlCenter': "busi_libs/viewer/ControlCenter",
-        'iclient-leaflet': "js_libs/supermap-libs/iclient9-leaflet"
-    },
-    shim: {
-        Cesium: {
-            exports: 'Cesium'
-        },
-        Zlib: {
-            exports: 'Zlib'
-        }
-    }
-});

@@ -60,7 +60,8 @@ define(function () {
             handler: listenerMap,
             timerId: 0,
             isCompleted: false,
-            total_count: -1
+            total_count: -1,
+            _pause:0
         });
     };　　// 事件对象初始化（这部分未实现）　　
     var timerEvent = new TimerEvent(TimerEvent.TIMER, false, false);
@@ -119,9 +120,25 @@ define(function () {
                     }
                 }, timerThis.delay);
             } else {
-                timerThis.timerId = setTimeout(function () {
-                    delayExecute(timerThis.handler[TimerEvent.TIMER_COMPLETE]);
-                }, timerThis.delay);
+                if (timerThis._pause !== 0) {
+                    timerThis.tick = timerThis._pause / globalScene.Interval;
+                    timerThis.timerId = setTimeout(function () {
+                        delayExecute(timerThis.handler[TimerEvent.TIMER_COMPLETE]);
+                    }, timerThis._pause);
+                    timerThis._pause = 0;
+                } else {
+                    timerThis.tick = timerThis.delay / globalScene.Interval;
+                    timerThis.timerId = setTimeout(function () {
+                        delayExecute(timerThis.handler[TimerEvent.TIMER_COMPLETE]);
+                    }, timerThis.delay);
+                }
+                timerThis.tick_id = setInterval(function () {
+                    if (timerThis.tick <= 0) {
+                        clearInterval(timerThis.tick_id);
+                    } else {
+                        timerThis.tick--;
+                    }
+                }, globalScene.Interval);
             }
             this.running = true;
 
@@ -154,15 +171,10 @@ define(function () {
                 clearInterval(this.timerId);
             } else {
                 clearTimeout(this.timerId);
-            }
-            if (!this.isCompleted&&!this.repeatType) {
-                var listeners = this.handler[TimerEvent.TIMER_COMPLETE];
-                for (var prop in listeners) {
-                    listeners[prop](timerCompleteEvent);
-                }
+                clearInterval(this.tick_id);
             }
             if (!this.repeatType) {
-                this.isCompleted = true;
+                this._pause = this.tick * globalScene.Interval;
             }
             var callback = arguments[0] ? arguments[0] : null;
             if (callback != null) {
@@ -172,6 +184,7 @@ define(function () {
             this.currentCount = 0;
             this.isCompleted = false;
             var callback = arguments[0] ? arguments[0] : null;
+            clearInterval(this.tick_id);
             if (callback != null) {
                 callback();
             }
@@ -180,6 +193,7 @@ define(function () {
                 clearInterval(this.timerId);
             } else {
                 clearTimeout(this.timerId);
+                clearInterval(this.tick_id);
             }
             this.currentCount = 0;
             this.isCompleted = false;

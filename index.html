@@ -84,6 +84,26 @@
     <div class="left-panel" style="display:none"></div>
 </div>
 <script>
+    require.config({
+        baseUrl: '',
+        waitSeconds: 0,
+        paths: {
+            'Cesium': '3d_libs/Cesium/Cesium',
+            'Zlib': '3d_libs/Cesium/Workers/zlib.min',
+            'BaseFunc': 'busi_libs/utils/BaseFunc',
+            'Timer': "busi_libs/utils/Timer",
+            'ControlCenter': "busi_libs/viewer/ControlCenter",
+            'iclient-leaflet': "js_libs/supermap-libs/iclient9-leaflet"
+        },
+        shim: {
+            Cesium: {
+                exports: 'Cesium'
+            },
+            Zlib: {
+                exports: 'Zlib'
+            }
+        }
+    });
     globalScene = {};
     require(["Timer", 'iclient-leaflet', "ControlCenter"], function () {
 

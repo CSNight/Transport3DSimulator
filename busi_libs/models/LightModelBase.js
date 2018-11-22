@@ -93,42 +93,72 @@ define(function (require) {
                     })
                 }
             },
-            cycle:info.cycle,
+            cycle: info.cycle,
             stopwatch: new Stopwatch(),
-            init_phase:info.current_phase,
+            init_phase: info.current_phase,
             current_phase: info.current_phase,
             current_id: "",
-            timer:null,
+            timer: null,
             handler: listenerMap
         });
-        var lightThis = this;
-        var init_color=get_color(lightThis.current_phase);
-        lightThis[init_color].interval=lightThis.cycle[lightThis.current_phase];
-        var current_entity=lightThis[init_color].entity;
-        if(lightThis[init_color].interval!==0) {
-            globalScene.Viewer.entities.add(current_entity);
-            lightThis.current_id = current_entity.id;
-        }
-        lightThis.timer=new Timer(lightThis[init_color].interval*1000,1);
-        function recursion(e) {
+
+    };
+    BASE.extend(LightModel.prototype, {
+        init: function () {
+            var lightThis = this;
+            //初始化
+            lightThis.current_phase = lightThis.init_phase;
+            lightThis.current_id = "";
+            lightThis.timer = null;
+            //初始状态初始化
+            var init_color = get_color(lightThis.current_phase);
+            lightThis[init_color].interval = lightThis.cycle[lightThis.current_phase];
+            var current_entity = lightThis[init_color].entity;
+            if (lightThis[init_color].interval !== 0) {
+                current_entity.show = globalScene.Lights_on;
+                globalScene.Viewer.entities.add(current_entity);
+                lightThis.current_id = current_entity.id;
+            }
+            lightThis.timer = new Timer(lightThis[init_color].interval * globalScene.Interval, 1);
+
+            //递归调用计时事件
+            function recursion(e) {
+                if (lightThis.current_id !== "") {
+                    globalScene.Viewer.entities.removeById(lightThis.current_id);
+                }
+                lightThis.current_phase = get_phase(lightThis.current_phase);
+                var next_color = get_color(lightThis.current_phase);
+                lightThis[next_color].interval = lightThis.cycle[lightThis.current_phase];
+                var next_entity = lightThis[next_color].entity;
+                next_entity.show = globalScene.Lights_on;
+                if (lightThis[next_color].interval !== 0) {
+                    globalScene.Viewer.entities.add(next_entity);
+                    lightThis.current_id = next_entity.id;
+                }
+                lightThis.timer = new Timer(lightThis[next_color].interval * globalScene.Interval, 1);
+                lightThis.timer.addEventListener('timerComplete', recursion);
+                lightThis.timer.start();
+            }
+
+            lightThis.timer.addEventListener('timerComplete', recursion);
+            this.stopwatch.start();
+        }, stop: function () {
+            var lightThis = this;
+            lightThis.timer.stop();
+        }, start: function () {
+            var lightThis = this;
+            lightThis.timer.start();
+        }, clear: function () {
+            var lightThis = this;
+            lightThis.timer.stop();
             if (lightThis.current_id !== "") {
                 globalScene.Viewer.entities.removeById(lightThis.current_id);
             }
-            lightThis.current_phase = get_phase(lightThis.current_phase);
-            var next_color = get_color(lightThis.current_phase);
-            lightThis[next_color].interval = lightThis.cycle[lightThis.current_phase];
-            var next_entity = lightThis[next_color].entity;
-            if (lightThis[next_color].interval !== 0) {
-                globalScene.Viewer.entities.add(next_entity);
-                lightThis.current_id = next_entity.id;
-            }
-            lightThis.timer = new Timer(lightThis[next_color].interval * 1000, 1);
-            lightThis.timer.addEventListener('timerComplete', recursion);
-            lightThis.timer.start();
+            lightThis.current_phase = lightThis.init_phase;
+            lightThis.current_id = "";
+            lightThis.timer = null;
         }
-        lightThis.timer.addEventListener('timerComplete',recursion);
-        this.stopwatch.start();
-    };
+    });
 
     function get_color(current_phase) {
         switch (current_phase) {
@@ -156,35 +186,7 @@ define(function (require) {
         return "P" + index;
     }
 
-    BASE.extend(LightModel.prototype, {
-        addEventListener: function (type, listener, useCapture) {
-            if (type === LightModelPositionChangedEvent.changed) {
-                if (!listener) {
-                    alert("Listener is null");
-                }
-                this.handler[type].push(listener);
-            }
-        }, removeEventListener: function (type, listener) {
-            if (type === LightModelPositionChangedEvent.changed) {
-                if (!listener) {
-                    this.handler[type] = [];
-                } else {
-                    var listeners = this.handler[type];
-                    for (var index = 0; index < listeners.length; index++) {
-                        if (listeners[index] === listener) {
-                            listeners.splice(index, 1);
-                            break;
-                        }
-                    }
-                }
-            }
-        }, getTotalRunTime: function () {
-            this.stopwatch.elapsedMilliseconds.toLocaleString('hh:mm:ss.fff');
-        }, clearTime: function () {
-            this.stopwatch.reset();
-            this.stopwatch.start();
-        }
-    });
+
     return {
         LightModel: LightModel
     }
