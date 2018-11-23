@@ -243,7 +243,7 @@ define(function () {
                 }
                 return found;
             }, diff: function (arr, k, x) {
-                arr_tmp = [];
+                var arr_tmp = [];
                 arr.forEach(function (val) {
                     arr_tmp.push(val[x][k]);
                 });

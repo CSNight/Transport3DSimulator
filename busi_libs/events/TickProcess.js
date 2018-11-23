@@ -89,7 +89,7 @@ define(function (require) {
         dif.forEach(function (cur) {
             var index=globalScene.SIM_CAR_LIST.indexOfKey("car_id",cur);
             var car_mo=globalScene.SIM_CAR_LIST.get(index);
-            globalScene.carDynamicLayer.clearState(car_mo.url, [cur]);
+            globalScene.carDynamicLayer.clearState(car_mo.url, cur);
             CarListPlugin.sim_remove(car_mo);
             //删除移除车辆的气泡标签
             globalScene.Viewer.entities.removeById(car_mo.car_id);
