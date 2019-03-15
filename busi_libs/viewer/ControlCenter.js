@@ -4,7 +4,7 @@ define(function (require) {
 
 
     MainScene.init('cesiumContainer', function (e) {
-        MainScene.switchBase(true, "");
+        MainScene.switchBase(true, "bing");
         MainScene.sceneEventRegister("l_click", SceneProcess.LeftClick);
         init_plugin_stat();
     });

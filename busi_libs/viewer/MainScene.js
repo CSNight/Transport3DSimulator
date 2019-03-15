@@ -157,7 +157,7 @@ define(function (require) {
                     break;
                 default:
                     imageryProvider = new Cesium.TiandituImageryProvider({
-                        credit: new Cesium.Credit('天地图全球影像服务     数据来源：国家地理信息公共服务平台 & 四川省测绘地理信息局')
+                        credit: new Cesium.Credit('f5a5b965118d9f64418ff38c6bcf25f3')
                     });
                     break;
             }

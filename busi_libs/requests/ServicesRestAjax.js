@@ -66,7 +66,7 @@ define(function () {
         // GET-Ajax
         var ResultGet = function getQuery(data, restin, method) {
             $.ajax({
-                url: Config.DataService + restin + '/' + method,
+                url: Config.SimServer + restin + '/' + method,
                 type: "GET",
                 data: data,
                 timeout: 0,

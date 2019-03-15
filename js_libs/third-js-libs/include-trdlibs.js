@@ -141,7 +141,7 @@
         var excepts = (targetScript.getAttribute('excepts') || "").split(",");
         if (excepts.length > 0) {
             if (excepts.indexOf("jquery") === -1) {
-                inputScript("jquery/jquery.min.js");
+                inputScript("jquery/jquery-3.3.1.min.js");
             }
             if (excepts.indexOf("leaflet") === -1) {
                 inputCSS("leaflet/css/leaflet.css");

@@ -5,6 +5,9 @@ define(function (require) {
     var BASE = require('busi_libs/utils/BaseFunc');
     var SRAjax = require("busi_libs/requests/ServicesRestAjax");
     var TickFrameEvent = function (e) {
+        if (!globalScene.globalTimer.running) {
+            return;
+        }
         var search = ES.search_builder(e.times - 1000, e.times, {
             index: "trans_sim",
             "es_type": "car_trajectory",
@@ -12,6 +15,9 @@ define(function (require) {
             "ident": e.file_id
         });
         ES.es_request_func(search, function (es) {
+            if (!globalScene.globalTimer.running) {
+                return;
+            }
             var stat = parseJsonToCar(es.hits.hits);
             CarListPlugin.statistic(stat.count_n, stat.count_o, stat.count_d);
             //状态分组更新
@@ -28,17 +34,17 @@ define(function (require) {
                 globalScene.carDynamicLayer.updateObjectWithModel(key, urls[key]);
             }
             //车辆气泡标签控制
-            if(globalScene.Pop_on){
+            if (globalScene.Pop_on) {
                 for (var i = 0; i < globalScene.SIM_CAR_LIST.size(); i++) {
                     globalScene.Viewer.entities.removeById(globalScene.SIM_CAR_LIST.get(i).car_id);
                 }
                 for (var i = 0; i < globalScene.SIM_CAR_LIST.size(); i++) {
-                    var car_model=globalScene.SIM_CAR_LIST.get(i);
+                    var car_model = globalScene.SIM_CAR_LIST.get(i);
                     globalScene.Viewer.entities.add({
                         id: car_model.car_id,
                         position: Cesium.Cartesian3.fromDegrees(car_model.pos.x, car_model.pos.y, car_model.pos.z + 10),
                         label: {
-                            text: 'Mod'+BASE.base64decode(car_model.info.car_id),
+                            text: 'Mod' + BASE.base64decode(car_model.info.car_id),
                             font: '15px Helvetica',
                             fillColor: Cesium.Color.RED,
                             outlineColor: Cesium.Color.RED,
@@ -48,7 +54,7 @@ define(function (require) {
                         }
                     });
                 }
-            }else {
+            } else {
                 for (var i = 0; i < globalScene.SIM_CAR_LIST.size(); i++) {
                     globalScene.Viewer.entities.removeById(globalScene.SIM_CAR_LIST.get(i).car_id);
                 }
@@ -74,7 +80,7 @@ define(function (require) {
                 car_stat.count_n = car_stat.count_n + 1;
             } else {
                 var car_index = globalScene.SIM_CAR_LIST.indexOfKey("car_id", _source.car_id);
-                var car_model=globalScene.SIM_CAR_LIST.get(car_index);
+                var car_model = globalScene.SIM_CAR_LIST.get(car_index);
                 car_model.updateInfo(_source);
                 if (car_index < 0) {
                     alert(_source.car_id);
@@ -87,8 +93,8 @@ define(function (require) {
         var dif = globalScene.SIM_CAR_LIST.diff(es_json, "car_id", "_source");
         car_stat.count_d = dif.length;
         dif.forEach(function (cur) {
-            var index=globalScene.SIM_CAR_LIST.indexOfKey("car_id",cur);
-            var car_mo=globalScene.SIM_CAR_LIST.get(index);
+            var index = globalScene.SIM_CAR_LIST.indexOfKey("car_id", cur);
+            var car_mo = globalScene.SIM_CAR_LIST.get(index);
             globalScene.carDynamicLayer.clearState(car_mo.url, cur);
             CarListPlugin.sim_remove(car_mo);
             //删除移除车辆的气泡标签
@@ -98,8 +104,15 @@ define(function (require) {
         return car_stat;
     };
     var TickStreamEvent = function (e) {
+        if (!globalScene.globalTimer.running) {
+            return;
+        }
         var stream = new SRAjax(function (res) {
             if (res.response) {
+                if (!globalScene.globalTimer.running) {
+                    return;
+                }
+                var timestampe = Date.parse(new Date());
                 var stat = parserMapToCar(res.response);
                 CarListPlugin.statistic(stat.count_n, stat.count_o, stat.count_d);
                 var state = [];
@@ -128,6 +141,8 @@ define(function (require) {
                     // }
                 }
                 globalScene.carDynamicLayer.updateObjectWithModel(car_obj.url, state);
+                var timestamped = Date.parse(new Date());
+                console.log(timestamped - timestampe);
             }
         });
         stream.StreamREST({

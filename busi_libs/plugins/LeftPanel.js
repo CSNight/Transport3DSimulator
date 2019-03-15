@@ -1,5 +1,23 @@
 define(function (require) {
+    var CarListPlugin = require('busi_libs/plugins/CarList');
     var init = function (t) {
+        if (globalScene.globalTimer !== undefined) {
+            globalScene.globalTimer.stop();
+            globalScene.carDynamicLayer.clearAllState();
+        }
+        CarListPlugin.clear();
+        if (globalScene.SIM_CAR_LIST) {
+            for (var i = 0; i < globalScene.SIM_CAR_LIST.size(); i++) {
+                globalScene.Viewer.entities.removeById(globalScene.SIM_CAR_LIST.get(i).car_id);
+            }
+        }
+        if (globalScene.STREAM_CAR_LIST) {
+            for (var key in globalScene.STREAM_CAR_LIST) {
+                if (globalScene.STREAM_CAR_LIST[key].info.hasOwnProperty("stop_json")) {
+                    globalScene.Viewer.entities.removeById(key);
+                }
+            }
+        }
         switch (t) {
             case 'sim':
                 setSimHtmlFrame();
@@ -20,28 +38,24 @@ define(function (require) {
         html += '<div class="lp-statistic"></div><div class="lp-select"></div><div class="lp-info"></div></div>';
         html += '<div class="lp-foot"></div>';
         $('.left-panel').append(html);
-        var lp_check="<div><input class='lpc-lights' type='checkbox' checked=checked /><div class='lpc-title'>启用信号灯</div>";
-        lp_check+="<input class='lpc-pop' type='checkbox'/><div class='lpc-title'>启用气泡标签</div></div>";
+        var lp_check = "<div><input class='lpc-lights' type='checkbox' checked=checked /><div class='lpc-title'>启用信号灯</div>";
+        lp_check += "<input class='lpc-pop' type='checkbox'/><div class='lpc-title'>启用气泡标签</div></div>";
         $('.lp-check').html(lp_check);
 
         $('.lp-main').height($('.left-panel').height() - 88);
-        if (globalScene.globalTimer !== undefined) {
-            globalScene.globalTimer.stop();
-            globalScene.carDynamicLayer.clearAllState();
-        }
         var SimFileIO = require('busi_libs/requests/SimFileIO');
         SimFileIO.SimCSVSearch();
         //启用信号灯check
         $('.lpc-lights').click(function () {
             globalScene.Lights_on = $(this)[0].checked;
             //实时信号灯控制显隐
-            if(globalScene.Lights_List.size()!==0&&!globalScene.Lights_on){
-                for(var i=0;i<globalScene.Lights_List.size();i++){
-                    globalScene.Viewer.entities.getById(globalScene.Lights_List.get(i).current_id).show=false;
+            if (globalScene.Lights_List.size() !== 0 && !globalScene.Lights_on) {
+                for (var i = 0; i < globalScene.Lights_List.size(); i++) {
+                    globalScene.Viewer.entities.getById(globalScene.Lights_List.get(i).current_id).show = false;
                 }
-            }else if(globalScene.Lights_List.size()!==0&&globalScene.Lights_on){
-                for(var i=0;i<globalScene.Lights_List.size();i++){
-                    globalScene.Viewer.entities.getById(globalScene.Lights_List.get(i).current_id).show=true;
+            } else if (globalScene.Lights_List.size() !== 0 && globalScene.Lights_on) {
+                for (var i = 0; i < globalScene.Lights_List.size(); i++) {
+                    globalScene.Viewer.entities.getById(globalScene.Lights_List.get(i).current_id).show = true;
                 }
             }
         });
@@ -62,10 +76,7 @@ define(function (require) {
         html += '<div class="lp-foot"></div>';
         $('.left-panel').append(html);
         $('.lp-main').height($('.left-panel').height() - 88);
-        if (globalScene.globalTimer !== undefined) {
-            globalScene.globalTimer.stop();
-            globalScene.carDynamicLayer.clearAllState();
-        }
+
         var StreamDataIO = require('busi_libs/requests/StreamDataIO');
         StreamDataIO.init();
     };

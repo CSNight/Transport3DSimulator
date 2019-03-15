@@ -67,10 +67,12 @@ define(function (require) {
             var pick_col = globalScene.Viewer.scene.context._pickObjects;
             for (var key in pick_col) {
                 var car = pick_col[key].primitive._description;
-                if (car.car_id === BASE.base64encode($(this).attr('id'))) {
-                    pick_col[key].primitive.setSelected(pick_col[key].index);
-                    globalScene.Viewer.selectedEntity = pick_col[key];
-                    break;
+                if (car) {
+                    if (car.car_id === $(this).attr('id')) {
+                        pick_col[key].primitive.setSelected(pick_col[key].index);
+                        globalScene.Viewer.selectedEntity = pick_col[key];
+                        break;
+                    }
                 }
             }
         });

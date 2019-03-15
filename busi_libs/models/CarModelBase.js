@@ -114,7 +114,6 @@ define(function (require) {
                 latitude: info.y,
                 altitude: info.z + 3,
                 scale: new Cesium.Cartesian3(1, 1, 1),
-
                 id: info.car_id,
                 description: info
             });

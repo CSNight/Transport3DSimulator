@@ -1,13 +1,13 @@
 var Config = {
     "bingMap": 'https://dev.virtualearth.net',
     "BING_MAP_KEY": 'ArLWvxLVAh1vxsmDZuOxr94On14sA52a_IPUewEz8H7mm3qDQnjWe-OzJtu1PZpZ',
-    "marbleMap": 'http://10.1.30.28:8090/iserver/services/map-BlackMarble/rest/maps/BlackMarble',
-    "vectorMap": "http://10.1.30.28:8090/iserver/services/map-ChinaAll/rest/maps/哈尔滨",
-    "lightsData":"http://10.1.30.28:8090/iserver/services/data-LightsVector/rest/data",
+    "marbleMap": 'http://10.1.30.27:8090/iserver/services/map-BlackMarble/rest/maps/BlackMarble',
+    "vectorMap": "http://10.1.30.27:8090/iserver/services/map-ChinaAll/rest/maps/哈尔滨",
+    "lightsData":"http://10.1.30.27:8090/iserver/services/data-LightsVector/rest/data",
     "scenesUrl": {
-        "Base": "http://10.1.30.28:8090/iserver/services/3D-DM/rest/realspace",
-        "Component": "http://10.1.30.28:8090/iserver/services/3D-Component/rest/realspace",
-        "JZ": "http://10.1.30.28:8090/iserver/services/3D-JZ/rest/realspace"
+        "Base": "http://10.1.30.27:8090/iserver/services/3D-DM/rest/realspace",
+        "Component": "http://10.1.30.27:8090/iserver/services/3D-Component/rest/realspace",
+        "JZ": "http://10.1.30.27:8090/iserver/services/3D-JZ/rest/realspace"
     },
     "destination": {
         "MyScene": {
@@ -21,7 +21,8 @@ var Config = {
             }
         }
     },
-    "DataService": "http://10.1.30.28:8020/",
+    "DataService": "http://10.1.30.28:8070/",
+    "SimServer":"http://10.1.30.28:8020/",
     "ESService": "http://10.1.30.28:9200",
     "CarModelUrls": [
         './resource/qiche1.s3m', './resource/qiche2.s3m', './resource/qiche3.s3m', './resource/qiche4.s3m', './resource/qiche5.s3m', './resource/qiche6.s3m',

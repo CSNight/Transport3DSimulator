@@ -17,7 +17,7 @@ define(function (require) {
             } else {
                 $(this).removeClass('active')
             }
-            if (!$(this).hasClass('running')) {
+            if (!$(this).hasClass('running')||$('.bbot-navs ul li.two').hasClass('running')) {
                 LeftPanel.init('sim');
                 $(this).addClass('running');
                 setClose('.lp-head .close', '.left-panel', '.bbot-navs ul li:first-child');
@@ -32,7 +32,7 @@ define(function (require) {
             } else {
                 $(this).removeClass('active')
             }
-            if (!$(this).hasClass('running')) {
+            if (!$(this).hasClass('running')||$('.bbot-navs ul li.one').hasClass('running')) {
                 LeftPanel.init('stream');
                 $(this).addClass('running');
                 setClose('.lp-head .close', '.left-panel', '.bbot-navs ul li:nth-child(2)');
