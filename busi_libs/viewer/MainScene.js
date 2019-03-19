@@ -25,10 +25,10 @@ define(function (require) {
                             }
                         });
                         var carDynamiclayer = new Cesium.DynamicLayer3D(scene.context, Config.CarModelUrls);
-                        var dynamic=scene.primitives.add(carDynamiclayer);
+                        var dynamic = scene.primitives.add(carDynamiclayer);
                         globalScene = {
-                            scene:scene,
-                            primitive_dynamic:dynamic,
+                            scene: scene,
+                            primitive_dynamic: dynamic,
                             Viewer: viewer,
                             carDynamicLayer: carDynamiclayer,
                             map: null,
@@ -37,8 +37,8 @@ define(function (require) {
                             models: {},
                             baseMap: null,
                             Lights_on: true,
-                            Pop_on:false,
-                            Interval:1000
+                            Pop_on: false,
+                            Interval: 1000
                         };
                         toolbar(viewer);
                         var ToolBar = require('busi_libs/plugins/ToolBar');
@@ -48,6 +48,7 @@ define(function (require) {
                         if (typeof callback === 'function') {
                             callback();
                         }
+
                     }, function (e) {
                         if (widget._showRenderLoopErrors) {
                             var title = '加载SCP失败，请检查网络连接状态或者url地址是否正确？';
@@ -56,14 +57,14 @@ define(function (require) {
                     });
                 });
             });
-        }
-        catch (e) {
+        } catch (e) {
             if (widget._showRenderLoopErrors) {
                 var title = '渲染时发生错误，已停止渲染。';
                 widget.showErrorPanel(title, undefined, e);
             }
         }
     };
+
     function toolbar(viewer) {
         var viewModel = {
             brightness: 0,
@@ -111,6 +112,7 @@ define(function (require) {
                 }
             }
         }
+
         updateViewModel();
         viewer.imageryLayers.layerAdded.addEventListener(updateViewModel);
         viewer.imageryLayers.layerRemoved.addEventListener(updateViewModel);
@@ -196,8 +198,7 @@ define(function (require) {
                             cesiumWidget.showErrorPanel('S3M图层叠加失败。', undefined, e);
                         }
                     });
-                }
-                else {
+                } else {
                     //第一个图层已叠加，直接飞行至范围
                     if (i === 0) {
                         if (isFly) {
@@ -209,8 +210,7 @@ define(function (require) {
                     globalScene.models[model.name] = model.url;
                 }
             }
-        }
-        catch (e) {
+        } catch (e) {
             if (cesiumWidget._showRenderLoopErrors) {
                 cesiumWidget.showErrorPanel('渲染时发生错误，已停止渲染。', undefined, e);
             }
@@ -228,8 +228,7 @@ define(function (require) {
                 delete globalScene.models[model.name];
                 globalScene.Viewer.scene.layers.remove(model.name);
             }
-        }
-        catch (e) {
+        } catch (e) {
             if (widget._showRenderLoopErrors) {
                 widget.showErrorPanel('S3M图层移除失败', undefined, e);
             }
@@ -254,8 +253,7 @@ define(function (require) {
     var flyToHome = function (seconds) {
         if (seconds) {
             globalScene.Viewer.scene.camera.flyHome(seconds);
-        }
-        else {
+        } else {
             globalScene.Viewer.scene.camera.flyHome();
         }
     };

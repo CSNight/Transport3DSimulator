@@ -2,6 +2,9 @@ define(function (require) {
     var BASE = require('busi_libs/utils/BaseFunc');
     var left_click = function (e) {
         if (globalScene.Viewer.selectedEntity && globalScene.Viewer.selectedEntity.primitive) {
+            if (!globalScene.Viewer.selectedEntity.primitive._description) {
+                return;
+            }
             var car_id = globalScene.Viewer.selectedEntity.primitive._description.car_id;
             if (car_id.indexOf("黑") === -1) {
                 car_id = BASE.base64decode(car_id);

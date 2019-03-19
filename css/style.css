@@ -24,7 +24,7 @@ input[type=date]::-webkit-clear-button{visibility:hidden;}
 .map-container{position:relative;width:100%;height:100%;}
     .scene-main{float:left;width:100%;height:100%;}
     .map-main{float:right;width:0%;height:100%;}
-	.rtop-tool{position:absolute;right:120px;top:15px;width:300px;height:45px;border-radius:3px;background:rgba(75,122,185,.4);}
+	.rtop-tool{position:absolute;right:120px;top:15px;width:300px;height:45px;border-radius:3px;background:rgba(75,122,185,.4);overflow: hidden}
 		.rtop-tool ul{float:left;width:300px;height:100%;padding:0 14px;}
 		.rtop-tool ul li{float:left;width:34px;height:45px;padding:7px 1px 6px 1px;}
 		.rtop-tool ul li a,.rtop-tool ul li.active a{display:block;width:32px;height:32px;padding:0 7px;
@@ -42,6 +42,12 @@ input[type=date]::-webkit-clear-button{visibility:hidden;}
 		.rtop-tool ul li a.rtop-t09{background-position:-273px -7px;}
 		.rtop-tool ul li a:hover{transform-origin:center center;transform:rotate(360deg);transition:transform 0.2s;}
     .tool-panel{position:absolute;right:160px;top:80px;width:260px;display:none;background:rgba(0,0,0,.5);padding:10px 0;color:#fff}
+    .measure-panel{position:absolute;right:200px;top:65px;width:70px;display:none;background-color:#1b417a;;padding:5px 0;}
+    .measure-panel .ico{float:left;width:28px;height:28px;background: url(../images/icon_image.png) no-repeat -137px -7px;}
+    .measure-panel a{float:right;color:#fff;padding:5px;width:60%;font-size:14px}
+    .analysis-panel{position:absolute;right:200px;top:65px;width:110px;display:none;background-color:#1b417a;;padding:5px 0;}
+    .analysis-panel .ico{float:left;width:28px;height:28px;background: url(../images/icon_image.png) no-repeat -103px -7px;}
+    .analysis-panel a{float:right;color:#fff;padding:5px;width:60%;font-size:14px}
 	.layer-panel{position:absolute;right:160px;top:80px;width:260px;display:none;background:rgba(0,0,0,.2);padding:10px 0;}
 	    .layer-panel:after{content:'';display:block;position:absolute;left:24px;top:-4px;width:0;height:0;
 			border: 7px solid transparent;

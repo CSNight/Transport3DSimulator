@@ -42,7 +42,7 @@ define(function (require) {
             obj_state: new Cesium.DynamicObjectState({
                 longitude: info.x,
                 latitude: info.y,
-                altitude: info.z + 3,
+                altitude: info.z,
                 scale: new Cesium.Cartesian3(1, 1, 1),
                 startDirection: info.direction/ 180 * Math.PI-Math.PI/2,
                 id: info.car_id,
@@ -112,7 +112,7 @@ define(function (require) {
             carThis.obj_state = new Cesium.DynamicObjectState({
                 longitude: info.x,
                 latitude: info.y,
-                altitude: info.z + 3,
+                altitude: info.z,
                 scale: new Cesium.Cartesian3(1, 1, 1),
                 id: info.car_id,
                 description: info

@@ -22,14 +22,14 @@
     <div id="map" class="map-main"></div>
     <div class="rtop-tool">
         <ul>
-            <li class="layer"><a class="rtop-t01" href="javascript:"></a></li>
-            <li class="data"><a class="rtop-t03" href="javascript:"></a></li>
-            <li class="manage"><a class="rtop-t02" href="javascript:"></a></li>
-            <li><a class="rtop-t04" href="javascript:"></a></li>
-            <li><a class="rtop-t05" href="javascript:"></a></li>
-            <li class="home"><a class="rtop-t06" href="javascript:"></a></li>
-            <li><a class="rtop-t07" href="javascript:"></a></li>
-            <li><a class="rtop-t08" href="javascript:"></a></li>
+            <li class="layer"><a class="rtop-t01" href="javascript:" title="图层管理"></a></li>
+            <li class="data"><a class="rtop-t03" href="javascript:" title="场景定位"></a></li>
+            <li class="manage"><a class="rtop-t02" href="javascript:" title="模拟文件管理"></a></li>
+            <li><a class="rtop-t04" href="javascript:" title="三维分析"></a></li>
+            <li><a class="rtop-t05" href="javascript:" title="三维测量"></a></li>
+            <li class="home"><a class="rtop-t06" href="javascript:" title="视角重置"></a></li>
+            <li class="confScene"><a class="rtop-t07" href="javascript:" title="亮度调整"></a></li>
+            <li><a class="rtop-t09" id="toolOnOff" href="javascript:" title="收起"></a></li>
         </ul>
     </div>
     <!-- 底部导航 -->
@@ -80,6 +80,19 @@
     <div class="layer-panel">
         <div class="layer-tree" id="layer-tree"></div>
     </div>
+    <div class="measure-panel">
+        <div><a class="ico"></a><a href="javascript:" id="ms">测距</a></div>
+        <div><a class="ico"></a><a href="javascript:" id="ma">测面</a></div>
+        <div><a class="ico"></a><a href="javascript:" id="mh">测高</a></div>
+        <div><a href="javascript:" id="cl">清除</a></div>
+    </div>
+    <div class="analysis-panel">
+        <div><a class="ico"></a><a href="javascript:" id="sh">通视分析</a></div>
+        <div><a class="ico"></a><a href="javascript:" id="po">剖面</a></div>
+        <div><a href="javascript:" id="cle">清除</a></div>
+    </div>
+    <canvas style="position:absolute;right:2%;bottom:2%;background-color:rgba(65, 65, 65, 0.5);display:none"
+            id="pro" height="0" width="0"></canvas>
     <!-- 左侧面板 -->
     <div class="left-panel" style="display:none"></div>
 </div>
