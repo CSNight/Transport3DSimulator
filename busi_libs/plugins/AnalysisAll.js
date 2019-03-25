@@ -137,6 +137,13 @@ define(function () {
             profile.extendHeight = 40;
             //分析完毕的回调函数
             profile.getBuffer(function (buffer) {
+                if ($('.thr').hasClass("active")) {
+                    return;
+                }
+                if (globalScene.lock_profile) {
+                    globalScene.lock_profile = false;
+                    return;
+                }
                 var canvas = document.getElementById("pro");
                 canvas.height = profile._textureHeight;
                 canvas.width = profile._textureWidth;
@@ -145,7 +152,7 @@ define(function () {
                 imgData.data.set(buffer);
                 //在canvas上绘制图片
                 ctx.putImageData(imgData, 0, 0);
-                $("#pro").show();
+                $("#profile").show();
                 $("#pro").width(600);
                 $("#pro").height(450);
             });
@@ -176,7 +183,7 @@ define(function () {
         globalScene.Viewer.entities.removeAll();
         viewshed3D.distance = 0.1;
         globalScene.scene.viewFlag = true;
-        $('#pro').hide();
+        $('#profile').hide();
     };
     return {
         init: init,

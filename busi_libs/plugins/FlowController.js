@@ -55,11 +55,13 @@ define(function (require) {
         });
     };
     var start = function () {
+        var StreamDataIO = require('busi_libs/requests/StreamDataIO');
         if (globalScene.globalTimer.currentCount === 0) {
             globalScene.carDynamicLayer.clearAll();
             CarListPlugin.clear();
         }
-        globalScene.globalTimer.start();
+        StreamDataIO.InitGps();
+        //globalScene.globalTimer.start();
     };
     var stop = function () {
         globalScene.globalTimer.stop();

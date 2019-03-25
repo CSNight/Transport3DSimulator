@@ -28,6 +28,7 @@ define(function () {
                 return me._div;
             };
             latlng_control.addTo(globalScene.map);
+            $('#profile').hide();
         }
     };
     var handleMapEvent = function (div, map) {

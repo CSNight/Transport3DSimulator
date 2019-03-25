@@ -17,7 +17,7 @@ define(function (require) {
             } else {
                 $(this).removeClass('active')
             }
-            if (!$(this).hasClass('running')||$('.bbot-navs ul li.two').hasClass('running')) {
+            if (!$(this).hasClass('running') || $('.bbot-navs ul li.two').hasClass('running')) {
                 LeftPanel.init('sim');
                 $(this).addClass('running');
                 setClose('.lp-head .close', '.left-panel', '.bbot-navs ul li:first-child');
@@ -32,7 +32,7 @@ define(function (require) {
             } else {
                 $(this).removeClass('active')
             }
-            if (!$(this).hasClass('running')||$('.bbot-navs ul li.one').hasClass('running')) {
+            if (!$(this).hasClass('running') || $('.bbot-navs ul li.one').hasClass('running')) {
                 LeftPanel.init('stream');
                 $(this).addClass('running');
                 setClose('.lp-head .close', '.left-panel', '.bbot-navs ul li:nth-child(2)');
@@ -68,6 +68,10 @@ define(function (require) {
         $('.map-main').css('width', "50%");
         $('.map-main').css('display', 'block');
         base_map.init();
+        globalScene.deactiveAll();
+        globalScene.clearAll();
+        globalScene.lock_profile = true;
+        $('#profile').css('display', 'none');
     }
 
     function mapOff() {

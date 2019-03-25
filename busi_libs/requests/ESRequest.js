@@ -4,7 +4,7 @@ define(function () {
             return;
         }
         return {
-            index: sim_option.index,
+            index: sim_option.ident,
             type: sim_option.es_type,
             preference: "_primary",
             body: {

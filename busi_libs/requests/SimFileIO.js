@@ -3,9 +3,6 @@ define(function (require) {
     var SRAjax = require("busi_libs/requests/ServicesRestAjax");
     var TickProcess = require('busi_libs/events/TickProcess');
     var ProgressBar = require('busi_libs/plugins/ProgressBar');
-    var SimFileUpload = function () {
-
-    };
     /**
      * @param {bool} isCleanDb all/es
      * @param {string} data_type simulate/stream
@@ -19,7 +16,6 @@ define(function (require) {
         clear.DataREST({
             params: JSON.stringify({
                 "RqType": "ResetIndices",
-                "isClearDBHis": isCleanDb,
                 "data_type": data_type
             })
         });
@@ -61,8 +57,6 @@ define(function (require) {
         reset.DataREST({
             params: JSON.stringify({
                 "RqType": "ResetIndices",
-                "index_name": "trans_sim",
-                "data_type": "simulate",
                 "reset_type": re_t
             })
         });
@@ -99,12 +93,8 @@ define(function (require) {
             }
         }
     };
-    var StreamASK = function () {
 
-    };
     return {
-        SimFileInfo: SimFileInfo,
-        SimFileUpload: SimFileUpload,
         SimDataRest: SimDataRest,
         SimCsvAndDBHisClear: SimCsvAndDBHisClear,
         SimCSVSearch: SimCSVSearch

@@ -145,7 +145,6 @@ function ImportToEs(filename, keyword, data_info) {
         data: {
             params: JSON.stringify({
                 "RqType": "ImportToES",
-                "data_type": "simulate",
                 "file_name": filename,
                 "keyword": keyword,
                 "info": data_info
@@ -179,8 +178,6 @@ function bindEvent() {
             data: {
                 params: JSON.stringify({
                     "RqType": "ResetIndices",
-                    "index_name": "trans_sim",
-                    "data_type": "simulate",
                     "reset_type": $(this).attr('name')
                 })
             },

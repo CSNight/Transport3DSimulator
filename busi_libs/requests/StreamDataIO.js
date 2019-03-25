@@ -8,7 +8,7 @@ define(function (require) {
     var init = function () {
         $('.lp-static').html("车辆监控列表");
         globalScene.STREAM_CAR_LIST = {};
-        globalScene.globalTimer = new Timer(2000, null);
+        globalScene.globalTimer = new Timer(1000, null);
         globalScene.globalTimer.addEventListener('timer', TickProcess.TickStreamEvent);
         globalScene.globalTimer.addEventListener('timer', function () {
             var getLine = new SRAjax(function (res) {
@@ -96,6 +96,6 @@ define(function (require) {
         return car_stat
     };
     return {
-        init: init
+        init: init, InitGps: InitGps
     }
 });
