@@ -94,6 +94,7 @@ define(function (require) {
             for(var i=0;i<globalScene.Lights_List.size();i++){
                 globalScene.Lights_List.get(i).start();
             }
+            $('.lpc-lights').click();
         }
         //运行到末尾重置
         else if (globalScene.globalTimer.currentCount === globalScene.globalTimer.total_count) {

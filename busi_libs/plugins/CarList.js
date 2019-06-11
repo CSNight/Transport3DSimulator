@@ -28,10 +28,43 @@ define(function (require) {
             var pick_col = globalScene.Viewer.scene.context._pickObjects;
             for (var key in pick_col) {
                 var car = pick_col[key].primitive._description;
+                if(!car){
+                    continue;
+                }
                 if (car.car_id === BASE.base64encode($(this).attr('id'))) {
-                    pick_col[key].primitive.setSelected(pick_col[key].index);
-                    globalScene.Viewer.selectedEntity = pick_col[key];
+                    var trackedEntity = null;
+                    var selectedPrimitive = pick_col[key].primitive; // 选中的图元
+                    var ownerGroup = selectedPrimitive._ownerGroup; // 图元所在的组信息
+                    var stateList = ownerGroup.stateList; // 状态信息列表
+                    var state = stateList.get(pick_col[key].id);
+                    if (!trackedEntity) {
+                        trackedEntity = globalScene.Viewer.entities.add({
+                            id: 'tracked-entity',
+                            position: state.position,
+                            point: {
+                                pixelSize: 1,
+                                show: true // 不能设为false
+                            },
+                            viewFrom: new Cesium.Cartesian3(-100, -150, 100) // 观察位置的偏移量
+                        });
+                        globalScene.Viewer._selectedEntity = trackedEntity;
+                        var selectionIndicatorViewModel = defined(globalScene.Viewer._selectionIndicator) ? globalScene.Viewer._selectionIndicator.viewModel : undefined;
+                        if (defined(trackedEntity)) {
+                            if (defined(selectionIndicatorViewModel)) {
+                                selectionIndicatorViewModel.animateAppear();
+                            }
+                        } else if (defined(selectionIndicatorViewModel)) {
+                            selectionIndicatorViewModel.animateDepart();
+                        }
+                        globalScene.Viewer._selectedEntityChanged.raiseEvent(trackedEntity);
+                    } else {
+                        trackedEntity.position = state.position;
+                    }
+                    globalScene.Viewer.trackedEntity = trackedEntity;
                     break;
+                } else {
+                    globalScene.Viewer.trackedEntity = null;
+                    globalScene.Viewer._selectedEntity = null;
                 }
             }
         });
@@ -69,14 +102,49 @@ define(function (require) {
                 var car = pick_col[key].primitive._description;
                 if (car) {
                     if (car.car_id === $(this).attr('id')) {
-                        pick_col[key].primitive.setSelected(pick_col[key].index);
-                        globalScene.Viewer.selectedEntity = pick_col[key];
+                        var trackedEntity = null;
+                        var selectedPrimitive = pick_col[key].primitive; // 选中的图元
+                        var ownerGroup = selectedPrimitive._ownerGroup; // 图元所在的组信息
+                        var stateList = ownerGroup.stateList; // 状态信息列表
+                        var state = stateList.get(pick_col[key].id);
+                        if (!trackedEntity) {
+                            trackedEntity = globalScene.Viewer.entities.add({
+                                id: 'tracked-entity',
+                                position: state.position,
+                                point: {
+                                    pixelSize: 1,
+                                    show: true // 不能设为false
+                                },
+                               // 观察位置的偏移量
+                            });
+                            globalScene.Viewer._selectedEntity = trackedEntity;
+                            var selectionIndicatorViewModel = defined(globalScene.Viewer._selectionIndicator) ? globalScene.Viewer._selectionIndicator.viewModel : undefined;
+                            if (defined(trackedEntity)) {
+                                if (defined(selectionIndicatorViewModel)) {
+                                    selectionIndicatorViewModel.animateAppear();
+                                }
+                            } else if (defined(selectionIndicatorViewModel)) {
+                                selectionIndicatorViewModel.animateDepart();
+                            }
+                            globalScene.Viewer._selectedEntityChanged.raiseEvent(trackedEntity);
+                        } else {
+                            trackedEntity.position = state.position;
+                        }
+                        globalScene.Viewer.trackedEntity = trackedEntity;
                         break;
+                    } else {
+                        globalScene.Viewer.trackedEntity = null;
+                        globalScene.Viewer._selectedEntity = null;
                     }
                 }
             }
         });
     };
+
+    function defined(value) {
+        return value !== undefined && value !== null;
+    }
+
     var sim_remove = function (car_model) {
         var car_id = BASE.base64decode(car_model.car_id);
         if ($('#' + car_id).length == 0) {

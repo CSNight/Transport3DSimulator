@@ -38,7 +38,7 @@ define(function (require) {
         html += '<div class="lp-statistic"></div><div class="lp-select"></div><div class="lp-info"></div></div>';
         html += '<div class="lp-foot"></div>';
         $('.left-panel').append(html);
-        var lp_check = "<div><input class='lpc-lights' type='checkbox' checked=checked /><div class='lpc-title'>启用信号灯</div>";
+        var lp_check = "<div><input class='lpc-lights' type='checkbox' /><div class='lpc-title'>启用信号灯</div>";
         lp_check += "<input class='lpc-pop' type='checkbox'/><div class='lpc-title'>启用气泡标签</div></div>";
         $('.lp-check').html(lp_check);
 
@@ -51,11 +51,17 @@ define(function (require) {
             //实时信号灯控制显隐
             if (globalScene.Lights_List.size() !== 0 && !globalScene.Lights_on) {
                 for (var i = 0; i < globalScene.Lights_List.size(); i++) {
-                    globalScene.Viewer.entities.getById(globalScene.Lights_List.get(i).current_id).show = false;
+                    var cur = globalScene.Lights_List.get(i).current_id;
+                    if (cur !== '') {
+                        globalScene.Viewer.entities.getById(cur).show = false;
+                    }
                 }
             } else if (globalScene.Lights_List.size() !== 0 && globalScene.Lights_on) {
                 for (var i = 0; i < globalScene.Lights_List.size(); i++) {
-                    globalScene.Viewer.entities.getById(globalScene.Lights_List.get(i).current_id).show = true;
+                    var cur = globalScene.Lights_List.get(i).current_id;
+                    if (cur !== '') {
+                        globalScene.Viewer.entities.getById(cur).show = true;
+                    }
                 }
             }
         });
@@ -65,6 +71,13 @@ define(function (require) {
         });
     };
     var setStreamHtmlFrame = function () {
+        if (globalScene.Lights_on) {
+
+            $('.lpc-lights').click();
+            for (var i = 0; i < globalScene.Lights_List.size(); i++) {
+                globalScene.Lights_List.get(i).stop();
+            }
+        }
         $('.left-panel').html('');
         var html = '<div class="lp-head"><span class="name">实时数据</span>';
         html += '<span class="close"></span></div>';

@@ -35,14 +35,25 @@ define(function (require) {
                             pixelSize: 1,
                             show: true // 不能设为false
                         },
-                        viewFrom: new Cesium.Cartesian3(-100, -150, 100) // 观察位置的偏移量
+                        //viewFrom: new Cesium.Cartesian3(-100, -150, 100) // 观察位置的偏移量
                     });
+                    globalScene.Viewer._selectedEntity = trackedEntity;
+                    var selectionIndicatorViewModel = defined( globalScene.Viewer._selectionIndicator) ? globalScene.Viewer._selectionIndicator.viewModel : undefined;
+                    if (defined(trackedEntity)) {
+                        if (defined(selectionIndicatorViewModel)) {
+                            selectionIndicatorViewModel.animateAppear();
+                        }
+                    } else if (defined(selectionIndicatorViewModel)) {
+                        selectionIndicatorViewModel.animateDepart();
+                    }
+                    globalScene.Viewer._selectedEntityChanged.raiseEvent(trackedEntity);
                 } else {
                     trackedEntity.position = state.position;
                 }
                 globalScene.Viewer.trackedEntity = trackedEntity;
             } else {
                 globalScene.Viewer.trackedEntity = null;
+                globalScene.Viewer._selectedEntity = null;
             }
         } else {
             globalScene.Viewer.entities.removeById('tracked-entity');
@@ -50,6 +61,9 @@ define(function (require) {
             $('.lpi-box').removeClass('active');
             $('.lpi-box').show();
             $('.lp-select').html('');
+        }
+        function defined(value) {
+            return value !== undefined && value !== null;
         }
     };
 

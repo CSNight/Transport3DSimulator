@@ -14,19 +14,31 @@ define(function (require) {
         GetComList.ModelREST(Config.scenesUrl.Component);
     };
     var LayerTreeBuild = function (Com, JZ) {
+        JZ.sort(function (a, b) {
+            return a.name > b.name ? 1 : -1
+        });
         layerTree = new dTree('layerTree');
         layerTree.add(0, -1, '图层控制<span></span>', '', '', '', '', '', 'true');
         layerTree.add(1, 0, '建筑<span id="Build" class="all"><em></em></span>', '', '', '', 'images/layer.png', 'images/layer.png', 'true');
         layerTree.add(2, 0, '部件<span id="Component" class="all"><em></em></span>', '', '', '', 'images/layer.png', 'images/layer.png', 'true');
+        layerTree.add(3, 0, '地图', '', '', '', 'images/layer.png', 'images/layer.png', 'true');
         for (var i = 0; i < JZ.length; i++) {
-            layerTree.add(i + 3, 1, JZ[i].name +
+            var na = JZ[i].name;
+            for (var key in Config.ModelsScp) {
+                if (JZ[i].name.indexOf(key) !== -1) {
+                    na = na.replace(key, Config.ModelsScp[key]);
+                }
+            }
+            layerTree.add(i + 4, 1, na +
                 '<span id="' + JZ[i].path + "/config" + '" class="' + JZ[i].name + ' Build"><em></em></span>', '', '', '', 'images/layer.png', 'images/layer.png');
         }
         for (var i = 0; i < Com.length; i++) {
-            layerTree.add(i + JZ.length + 3, 2, Config.ModelsScp[Com[i].name] +
+            layerTree.add(i + JZ.length + 4, 2, Config.ModelsScp[Com[i].name] +
                 '<span id="' + Com[i].path + "/config" + '" class="' + Com[i].name + ' Component"><em></em></span>', '', '', '', 'images/layer.png', 'images/layer.png'
             );
         }
+        layerTree.add(Com.length + JZ.length + 4, 3, '哈尔滨矢量<span id="' + Config.vectorMap + '" class="ImageVector"><em></em></span>',
+            '', '', '', 'images/layer.png', 'images/layer.png');
         document.getElementById('layer-tree').innerHTML = layerTree;
         var MainScene = require('busi_libs/viewer/MainScene');
         $('.dTreeNode').on('click', function (e) {
@@ -40,6 +52,14 @@ define(function (require) {
             }
             if (!url || !name) {
                 return;
+            } else if (name === 'ImageVector') {
+                if (!$('.ImageVector').find('em').hasClass('selected')) {
+                    MainScene.addLayers([url]);
+                    $('.ImageVector').find('em').addClass('selected');
+                } else {
+                    MainScene.removeLayers([url]);
+                    $('.ImageVector').find('em').removeClass('selected');
+                }
             } else if (url === "Build") {
                 if (!$('#Build').find('em').hasClass('selected')) {
                     $('.Build').parent().toArray().forEach(function (node) {
@@ -67,7 +87,6 @@ define(function (require) {
             } else {
                 node_click(this, 'single');
             }
-
         });
 
         function node_click(node, status) {
@@ -138,6 +157,7 @@ define(function (require) {
             'cursoropacitymax': 0.8,
             'mousescrollstep': 100
         });
+        $('.ComponentXHD').parent().click();
     };
     return {
         init: init

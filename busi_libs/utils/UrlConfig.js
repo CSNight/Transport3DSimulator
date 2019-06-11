@@ -21,22 +21,26 @@ var Config = {
             }
         }
     },
-    "DataService": "http://127.0.0.1:8070/",
-    "SimServer": "http://127.0.0.1:8020/",
-    "ESService": "http://127.0.0.1:9200",
+    "DataService": "http://140.1.25.28:8070/",
+    "SimServer": "http://140.1.25.28:8020/",
+    "ESService": "http://140.1.25.28:9200",
     "CarModelUrls": [
         './resource/BUS_1.s3m', './resource/BUS_2.s3m', './resource/BUS_3.s3m', './resource/BUS_4.s3m', './resource/CAR_1.s3m', './resource/CAR_2.s3m',
         './resource/CAR_3.s3m', './resource/CAR_4.s3m', './resource/CAR_5.s3m', './resource/CAR_6.s3m', './resource/MBUS_1.s3m', './resource/MBUS_2.s3m',
         './resource/TCAR_1.s3m', './resource/TRACK_1.s3m', './resource/TRACK_2.s3m'
     ],
     "ModelsScp": {
+        "NG_JZ":"南岗区",
+        "DL_JZ":"道里区",
+        "ComponentLB": "路标",
         "ComponentLMP": "路名牌",
         "ComponentLD": "路灯",
-        "ComponentJTXHD": "交通信号灯",
+        "ComponentXHD": "交通信号灯",
         "ComponentTQ": "天桥",
         "ComponentSXT": "摄像头",
         "ComponentXDS": "行道树",
-        "ComponentZSP": "交通指示牌"
+        "ComponentZSP": "交通指示牌",
+        "ComponentGJZ": "公交站"
     },
     <!-- 设置交通路况展现形式，False表示以专题图类型展示，True表示以热度图方式展示 -->
     "IsHeatMap": "True",

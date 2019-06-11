@@ -7,7 +7,9 @@ define(function (require) {
                 name: "LightsLine_" + datestr + "@LightsVector",
                 attributeFilter: "SMID>0"
             },
-            datasetNames: ["LightsVector:LightsLine_" + datestr]
+            datasetNames: ["LightsVector:LightsLine_" + datestr],
+            foIndex:0,
+            toIndex:10000
         });
         L.supermap
             .featureService(Config.lightsData)
@@ -30,7 +32,7 @@ define(function (require) {
                         coors.push({
                             x: coor[0],
                             y: coor[1],
-                            z: coor[2] - 117
+                            z: coor[2]
                         });
                     });
                     coors.sort(function (a, b) {
@@ -42,7 +44,7 @@ define(function (require) {
                     }
                     var info = {
                         cross_id: feature.properties.CROSS_ID,
-                        light_id: feature.properties.LIGHTID,
+                        light_id: feature.properties.LIGHT_ID,
                         is_open: feature.properties.ISOPEN,
                         ct: feature.properties.CT,
                         model_id: feature.properties.MODEL_ID,
