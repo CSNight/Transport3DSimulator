@@ -48,6 +48,9 @@ define(function (require) {
         //启用信号灯check
         $('.lpc-lights').click(function () {
             globalScene.Lights_on = $(this)[0].checked;
+            if(!globalScene.Lights_List){
+                return;
+            }
             //实时信号灯控制显隐
             if (globalScene.Lights_List.size() !== 0 && !globalScene.Lights_on) {
                 for (var i = 0; i < globalScene.Lights_List.size(); i++) {
@@ -71,7 +74,7 @@ define(function (require) {
         });
     };
     var setStreamHtmlFrame = function () {
-        if (globalScene.Lights_on) {
+        if (globalScene.Lights_on && globalScene.Lights_List) {
 
             $('.lpc-lights').click();
             for (var i = 0; i < globalScene.Lights_List.size(); i++) {
