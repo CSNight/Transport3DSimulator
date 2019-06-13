@@ -112,6 +112,16 @@ define(function (require) {
             lightThis.timer = null;
             //初始状态初始化
             var init_color = get_color(lightThis.current_phase);
+            // if (!lightThis[init_color] && lightThis.is_open === 'false' && checkInterval(lightThis.cycle)) {
+            //     var static_entity = lightThis['red'].entity;
+            //     static_entity.show = globalScene.Lights_on;
+            //     globalScene.Viewer.entities.add(static_entity);
+            //     lightThis.current_id = static_entity.id;
+            //     return;
+            // }
+            if (!lightThis[init_color]) {
+                return;
+            }
             lightThis[init_color].interval = lightThis.cycle[lightThis.current_phase];
             var current_entity = lightThis[init_color].entity;
             if (lightThis[init_color].interval !== 0) {
@@ -144,13 +154,20 @@ define(function (require) {
             this.stopwatch.start();
         }, stop: function () {
             var lightThis = this;
-            lightThis.timer.stop();
+            if (lightThis.timer !== null) {
+                lightThis.timer.stop();
+            }
+
         }, start: function () {
             var lightThis = this;
-            lightThis.timer.start();
+            if (lightThis.timer !== null) {
+                lightThis.timer.start();
+            }
         }, clear: function () {
             var lightThis = this;
-            lightThis.timer.stop();
+            if (lightThis.timer !== null) {
+                lightThis.timer.stop();
+            }
             if (lightThis.current_id !== "") {
                 globalScene.Viewer.entities.removeById(lightThis.current_id);
             }
@@ -186,6 +203,16 @@ define(function (require) {
         return "P" + index;
     }
 
+    function checkInterval(cycle) {
+        var phase = ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8', 'P9', 'P10', 'P11', 'P12'];
+        var phase_nan = 0;
+        for (var i = 0; i < phase.length; i++) {
+            if (isNaN(cycle[phase])) {
+                phase_nan++;
+            }
+        }
+        return phase_nan !== 12;
+    }
 
     return {
         LightModel: LightModel

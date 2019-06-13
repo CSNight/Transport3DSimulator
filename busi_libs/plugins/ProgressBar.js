@@ -88,13 +88,18 @@ define(function (require) {
             $('.lp-select').html('');
             //初始化信号灯并启动
             globalScene.Viewer.entities.removeAll();
-            for(var i=0;i<globalScene.Lights_List.size();i++){
-                globalScene.Lights_List.get(i).init();
+            try{
+                for(var i=0;i<globalScene.Lights_List.size();i++){
+                    globalScene.Lights_List.get(i).init();
+                }
+                for(var i=0;i<globalScene.Lights_List.size();i++){
+                    globalScene.Lights_List.get(i).start();
+                }
+                $('.lpc-lights').click();
+            }catch (e) {
+                console.error(e);
             }
-            for(var i=0;i<globalScene.Lights_List.size();i++){
-                globalScene.Lights_List.get(i).start();
-            }
-            $('.lpc-lights').click();
+            
         }
         //运行到末尾重置
         else if (globalScene.globalTimer.currentCount === globalScene.globalTimer.total_count) {
@@ -105,7 +110,14 @@ define(function (require) {
                 globalScene.Lights_List.get(i).start();
             }
         }
-        globalScene.globalTimer.start();
+        if(globalScene.Lights_on){
+            setTimeout(function () {
+                globalScene.globalTimer.start();
+            },1000)
+        }else{
+            globalScene.globalTimer.start();
+        }
+
         $('#file-sele').attr('disabled', true)
     };
     var stop = function () {
