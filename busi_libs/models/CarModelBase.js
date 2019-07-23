@@ -39,12 +39,13 @@ define(function (require) {
             run_state: info.is_running,
             distance: info.mileage * 1.61,
             stopwatch: new Stopwatch(),
+            trajectory: info.trajectory,
             obj_state: new Cesium.DynamicObjectState({
                 longitude: info.x,
                 latitude: info.y,
                 altitude: info.z,
                 scale: new Cesium.Cartesian3(1, 1, 1),
-                startDirection: info.direction/ 180 * Math.PI-Math.PI/2,
+                startDirection: info.direction / 180 * Math.PI - Math.PI / 2,
                 id: info.car_id,
                 description: info
             }),
@@ -109,6 +110,7 @@ define(function (require) {
             carThis.run_state = info.is_running;
             carThis.distance = info.mileage * 1.61;
             carThis.speed = info.speed;
+            carThis.trajectory = info.trajectory;
             carThis.obj_state = new Cesium.DynamicObjectState({
                 longitude: info.x,
                 latitude: info.y,
@@ -127,11 +129,9 @@ define(function (require) {
                 var time = carThis.stopwatch.elapsedMilliseconds / 1000;
                 if (time !== 0 && carThis.run_state) {
                     return BASE.parseFixed(carThis.distance / 1000 / time * 3600, 3) + "km/h";
-                }
-                else if (!carThis.run_state) {
+                } else if (!carThis.run_state) {
                     return "0m/s";
-                }
-                else {
+                } else {
                     return "0m/s";
                 }
             }

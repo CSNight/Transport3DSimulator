@@ -15,7 +15,8 @@ define(function () {
         TIMER: "timer",
         TIMER_COMPLETE: "timerComplete",
         "times": 0,
-        file_id: ""
+        file_id: "",
+        current_times:0
     });
     /**　　* Event 方法　　*　　
      * * @method toString　　*/

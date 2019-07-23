@@ -41,7 +41,7 @@ define(function () {
         };
         globalScene.scene.viewFlag = true;
         var viewPosition;
-        globalScene.viewshedHandler = new Cesium.PointHandler(globalScene.Viewer);
+        globalScene.viewshedHandler = new Cesium.DrawHandler(globalScene.Viewer, Cesium.DrawMode.Point, Cesium.ClampMode.Space);
         //创建可视域分析对象
         viewshed3D = new Cesium.ViewShed3D(globalScene.scene);
         var handler = new Cesium.ScreenSpaceEventHandler(globalScene.scene.canvas);
@@ -75,21 +75,23 @@ define(function () {
             viewModel.verticalFov = viewshed3D.verticalFov;
             console.log(viewshed3D);
         }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
-        globalScene.viewshedHandler.drawCompletedEvent.addEventListener(function (point) {
-            var position = point.position._value;
+        globalScene.viewshedHandler.drawEvt.addEventListener(function (result) {
+            var point = result.object;
+            var position = point.position;
             viewPosition = position;
 
-            //将获取的点的位置转化成经纬度
+            // 将获取的点的位置转化成经纬度
             var cartographic = Cesium.Cartographic.fromCartesian(position);
             var longitude = Cesium.Math.toDegrees(cartographic.longitude);
             var latitude = Cesium.Math.toDegrees(cartographic.latitude);
-            var height = cartographic.height;
+            var height = cartographic.height + 1.8;
+            point.position = Cesium.Cartesian3.fromDegrees(longitude, latitude, height);
 
             if (globalScene.scene.viewFlag) {
-                //设置视口位置
+                // 设置视口位置
                 viewshed3D.viewPosition = [longitude, latitude, height];
                 viewshed3D.build();
-                //将标记置为false以激活鼠标移动回调里面的设置可视域操作
+                // 将标记置为false以激活鼠标移动回调里面的设置可视域操作
                 globalScene.scene.viewFlag = false;
             }
         });

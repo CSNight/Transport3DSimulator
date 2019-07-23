@@ -27,6 +27,7 @@ define(function (require) {
                 var ownerGroup = selectedPrimitive._ownerGroup; // 图元所在的组信息
                 var stateList = ownerGroup.stateList; // 状态信息列表
                 var state = stateList.get(pickedObject.id);
+                globalScene.Viewer.entities.removeById('tracked-entity');
                 if (!trackedEntity) {
                     trackedEntity = globalScene.Viewer.entities.add({
                         id: 'tracked-entity',
@@ -35,18 +36,20 @@ define(function (require) {
                             pixelSize: 1,
                             show: true // 不能设为false
                         },
+
                         //viewFrom: new Cesium.Cartesian3(-100, -150, 100) // 观察位置的偏移量
                     });
-                    globalScene.Viewer._selectedEntity = trackedEntity;
-                    var selectionIndicatorViewModel = defined( globalScene.Viewer._selectionIndicator) ? globalScene.Viewer._selectionIndicator.viewModel : undefined;
-                    if (defined(trackedEntity)) {
-                        if (defined(selectionIndicatorViewModel)) {
-                            selectionIndicatorViewModel.animateAppear();
-                        }
-                    } else if (defined(selectionIndicatorViewModel)) {
-                        selectionIndicatorViewModel.animateDepart();
-                    }
-                    globalScene.Viewer._selectedEntityChanged.raiseEvent(trackedEntity);
+                    console.log([state.position])
+                    // globalScene.Viewer._selectedEntity = trackedEntity;
+                    // var selectionIndicatorViewModel = defined( globalScene.Viewer._selectionIndicator) ? globalScene.Viewer._selectionIndicator.viewModel : undefined;
+                    // if (defined(trackedEntity)) {
+                    //     if (defined(selectionIndicatorViewModel)) {
+                    //         selectionIndicatorViewModel.animateAppear();
+                    //     }
+                    // } else if (defined(selectionIndicatorViewModel)) {
+                    //     selectionIndicatorViewModel.animateDepart();
+                    // }
+                    // globalScene.Viewer._selectedEntityChanged.raiseEvent(trackedEntity);
                 } else {
                     trackedEntity.position = state.position;
                 }
@@ -62,6 +65,7 @@ define(function (require) {
             $('.lpi-box').show();
             $('.lp-select').html('');
         }
+
         function defined(value) {
             return value !== undefined && value !== null;
         }

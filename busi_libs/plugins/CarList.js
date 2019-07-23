@@ -28,7 +28,7 @@ define(function (require) {
             var pick_col = globalScene.Viewer.scene.context._pickObjects;
             for (var key in pick_col) {
                 var car = pick_col[key].primitive._description;
-                if(!car){
+                if (!car) {
                     continue;
                 }
                 if (car.car_id === BASE.base64encode($(this).attr('id'))) {
@@ -78,7 +78,7 @@ define(function (require) {
         var off = car_model.run_state ? 'lp-on' : 'lp-off';
         html_item += '<p>状态:<i class="iconfont icon-yuan-copy ' + off + '"></i></p></div>';
         var st_car = "无";
-        if (car_model.info["stop_json"] !== null) {
+        if (car_model.info.hasOwnProperty("stop_json")) {
             st_car = car_model.info["stop_json"]["stop_status"] === 1 ? "是" : "否"
         }
         html_item += '<div class="lpib-list" style="width: 120px"><p style="color:yellow">到站状态:' + st_car + '</p>';
@@ -115,7 +115,7 @@ define(function (require) {
                                     pixelSize: 1,
                                     show: true // 不能设为false
                                 },
-                               // 观察位置的偏移量
+                                // 观察位置的偏移量
                             });
                             globalScene.Viewer._selectedEntity = trackedEntity;
                             var selectionIndicatorViewModel = defined(globalScene.Viewer._selectionIndicator) ? globalScene.Viewer._selectionIndicator.viewModel : undefined;
@@ -184,7 +184,7 @@ define(function (require) {
         var off = car_model.run_state ? 'lp-on' : 'lp-off';
         html_item += '<p>状态:<i class="iconfont icon-yuan-copy ' + off + '"></i></p></div>';
         var st_car = "无";
-        if (car_model.info["stop_json"] !== null) {
+        if (car_model.info.hasOwnProperty("stop_json")) {
             st_car = car_model.info["stop_json"]["stop_status"] === 1 ? "是" : "否"
         }
         html_item += '<div class="lpib-list" style="width: 120px"><p style="color:yellow">到站状态:' + st_car + '</p>';

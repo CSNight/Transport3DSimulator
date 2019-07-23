@@ -3,8 +3,23 @@ define(function (require) {
     var SceneProcess = require('busi_libs/events/SceneProcess');
     var MeasureAll = require('busi_libs/plugins/MeasureAll');
     var AnalysisAll = require('busi_libs/plugins/AnalysisAll');
+    globalScene = {
+        scene: null,
+        primitive_dynamic: null,
+        Viewer: null,
+        carDynamicLayer: null,
+        LineCarMap: null,
+        map: null,
+        LayerDic: {},
+        models: {},
+        baseMap: null,
+        Lights_on: true,
+        Pop_on: false,
+        Interval: 1000,
+        stream_type: "stream"
+    };
     MainScene.init('cesiumContainer', function (e) {
-        MainScene.switchBase(true, "bing");
+        MainScene.switchBase(true, "");
         MainScene.sceneEventRegister("l_click", SceneProcess.LeftClick);
         init_plugin_stat();
         MeasureAll.init();

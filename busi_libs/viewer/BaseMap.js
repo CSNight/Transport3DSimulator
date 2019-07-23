@@ -1,10 +1,12 @@
-define(function () {
+define(function (require) {
+    var ThemeProcess = require("busi_libs/events/ThemeProcess");
     var initMap = function () {
         var BASE = require('busi_libs/utils/BaseFunc');
         if (!globalScene.map) {
             globalScene.map = L.map('map', {
+                preferCanvas: true,
                 center: [45.774, 126.60],
-                maxZoom: 15,
+                maxZoom: 18,
                 minZoom: 1,
                 zoom: 10,
                 crs: L.CRS.EPSG3857,
@@ -17,7 +19,7 @@ define(function () {
             L.supermap.tiledMapLayer(Config.vectorMap).addTo(globalScene.map);
             var latlng_control = L.control({position: "bottomright"});
             latlng_control.onAdd = function () {
-                var me = this;
+                let me = this;
                 me._div = L.DomUtil.create('div');
                 me._div.style.width = "250px";
                 me._div.style.height = "20px";
@@ -28,8 +30,41 @@ define(function () {
                 return me._div;
             };
             latlng_control.addTo(globalScene.map);
+            var theme_control = L.control({position: "topright"});
+            theme_control.onAdd = function () {
+                let me = this;
+                me._div = L.DomUtil.create('div');
+                me._div.style.width = "120px";
+                me._div.style.height = "50px";
+                me._div.style.position = "absolute";
+                me._div.style.right = "20px";
+                me._div.style.fontSize = "14px";
+                me._div.style.fontWeight = "bold";
+                $("<div style='width:100%'>断面车流量专题:</div><select id='theme_select'><option value='none'>无</option><option value='dmcl_w'>调整前</option><option value='dmcl_y'>调整后</option></select>").appendTo(me._div);
+                return me._div;
+            };
+            theme_control.addTo(globalScene.map);
+            $('#theme_select').change(function () {
+                let index = $('#theme_select')[0].options.selectedIndex;
+                let map_theme = $('#theme_select')[0].options[index].value;
+                if (globalScene.themeLayer) {
+                    globalScene.map.removeLayer(globalScene.themeLayer);
+                    globalScene.themeLayer = undefined;
+                }
+                if (map_theme === 'none') {
+
+                } else {
+                    let options = {};
+                    options['transparent'] = true;
+                    options['zIndex'] = 100;
+                    globalScene.themeLayer = L.supermap.tiledMapLayer(Config.theme[map_theme], options);
+                    globalScene.map.addLayer(globalScene.themeLayer);
+                    globalScene.map.setView(new L.latLng(45.729, 126.550), 14)
+                }
+            });
             $('#profile').hide();
         }
+        ThemeProcess.init();
     };
     var handleMapEvent = function (div, map) {
         if (!div || !map) {

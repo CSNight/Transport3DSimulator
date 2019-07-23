@@ -7,39 +7,60 @@ define(function (require) {
     var setFrameHtml = function () {
         var GetComList = new SRAjax(function (resC) {
             var GetJZList = new SRAjax(function (resJ) {
-                LayerTreeBuild(resC.response, resJ.response);
+                var GetDMList = new SRAjax(function (resD) {
+                    LayerTreeBuild(resD.response, resJ.response, resC.response);
+                });
+                GetDMList.ModelREST(Config.scenesUrl.Base);
             });
             GetJZList.ModelREST(Config.scenesUrl.JZ);
         });
         GetComList.ModelREST(Config.scenesUrl.Component);
     };
-    var LayerTreeBuild = function (Com, JZ) {
+    var LayerTreeBuild = function (DM, JZ, Com) {
+        //名称排序
+        DM.sort(function (a, b) {
+            return a.name > b.name ? 1 : -1
+        });
         JZ.sort(function (a, b) {
             return a.name > b.name ? 1 : -1
         });
+        Com.sort(function (a, b) {
+            return a.name > b.name ? 1 : -1
+        });
         layerTree = new dTree('layerTree');
-        layerTree.add(0, -1, '图层控制<span></span>', '', '', '', '', '', 'true');
-        layerTree.add(1, 0, '建筑<span id="Build" class="all"><em></em></span>', '', '', '', 'images/layer.png', 'images/layer.png', 'true');
-        layerTree.add(2, 0, '部件<span id="Component" class="all"><em></em></span>', '', '', '', 'images/layer.png', 'images/layer.png', 'true');
-        layerTree.add(3, 0, '地图', '', '', '', 'images/layer.png', 'images/layer.png', 'true');
-        for (var i = 0; i < JZ.length; i++) {
-            var na = JZ[i].name;
-            for (var key in Config.ModelsScp) {
-                if (JZ[i].name.indexOf(key) !== -1) {
-                    na = na.replace(key, Config.ModelsScp[key]);
-                }
-            }
-            layerTree.add(i + 4, 1, na +
-                '<span id="' + JZ[i].path + "/config" + '" class="' + JZ[i].name + ' Build"><em></em></span>', '', '', '', 'images/layer.png', 'images/layer.png');
+        layerTree.add(0, -1, '图层控制<span></span>', '', '', '', '', '', true);
+        var xzqh_meta = {};
+        var index_gl = 1;
+        //区划根目录
+        for (var key in Config.XZQH) {
+            layerTree.add(index_gl, 0, Config.XZQH[key] + '<span class="' + key + '"></span>', '', '', '', '', '', false);
+            xzqh_meta[key] = {mc: Config.XZQH[key], index: index_gl, JZ: {}, DM: {}, Com: {}};
+            index_gl++;
         }
-        for (var i = 0; i < Com.length; i++) {
-            layerTree.add(i + JZ.length + 4, 2, Config.ModelsScp[Com[i].name] +
-                '<span id="' + Com[i].path + "/config" + '" class="' + Com[i].name + ' Component"><em></em></span>', '', '', '', 'images/layer.png', 'images/layer.png'
-            );
+        //区划内部三种类型（地面、建筑、部件）根目录
+        for (var index in Config.XZQH) {
+            var pid = xzqh_meta[index].index;
+            xzqh_meta[index].DM['index'] = index_gl;
+            xzqh_meta[index].DM['models'] = [];
+            layerTree.add(index_gl++, pid, '地面<span id="' + index + '_DM" class="DM"><em class="selected"></em></span>', '', '', '', 'images/layer.png', 'images/layer.png', false);
+            xzqh_meta[index].JZ['index'] = index_gl;
+            xzqh_meta[index].JZ['models'] = [];
+            layerTree.add(index_gl++, pid, '建筑<span id="' + index + '_JZ" class="JZ"><em></em></span>', '', '', '', 'images/layer.png', 'images/layer.png', false);
+            xzqh_meta[index].Com['index'] = index_gl;
+            xzqh_meta[index].Com['models'] = [];
+            layerTree.add(index_gl++, pid, '部件<span id="' + index + '_Com" class="Com"><em></em></span>', '', '', '', 'images/layer.png', 'images/layer.png', false);
         }
-        layerTree.add(Com.length + JZ.length + 4, 3, '哈尔滨矢量<span id="' + Config.vectorMap + '" class="ImageVector"><em></em></span>',
+        //区划分类目录填充
+        ModelOrganization(DM, JZ, Com, xzqh_meta, index_gl);
+        //矢量目录节点构建
+        layerTree.add(index_gl++, 0, '哈尔滨矢量<span id="' + Config.vectorMap + '" class="ImageVector"><em></em></span>',
+            '', '', '', 'images/layer.png', 'images/layer.png');
+        layerTree.add(index_gl++, 0, '天地图影像<span id="' + Config.vectorMap + '" class="TDT"><em class="selected"></em></span>',
+            '', '', '', 'images/layer.png', 'images/layer.png');
+        layerTree.add(index_gl, 0, 'Bing影像<span id="' + Config.vectorMap + '" class="BING"><em></em></span>',
             '', '', '', 'images/layer.png', 'images/layer.png');
         document.getElementById('layer-tree').innerHTML = layerTree;
+        globalScene.Mol = xzqh_meta;
         var MainScene = require('busi_libs/viewer/MainScene');
         $('.dTreeNode').on('click', function (e) {
             var url = $(this).find('span').attr('id');
@@ -60,91 +81,118 @@ define(function (require) {
                     MainScene.removeLayers([url]);
                     $('.ImageVector').find('em').removeClass('selected');
                 }
-            } else if (url === "Build") {
-                if (!$('#Build').find('em').hasClass('selected')) {
-                    $('.Build').parent().toArray().forEach(function (node) {
-                        node_click(node, 'open');
-                    });
-                    $('#Build').find('em').addClass('selected');
+            } else if (name === 'TDT') {
+                if (!$('.TDT').find('em').hasClass('selected')) {
+                    MainScene.switchBase(true, '');
+                    $('.TDT').find('em').addClass('selected');
                 } else {
-                    $('.Build').parent().toArray().forEach(function (node) {
-                        node_click(node, 'close');
-                    });
-                    $('#Build').find('em').removeClass('selected');
+                    MainScene.switchBase(false, '');
+                    $('.TDT').find('em').removeClass('selected');
                 }
-            } else if (url === "Component") {
-                if (!$('#Component').find('em').hasClass('selected')) {
-                    $('.Component').parent().toArray().forEach(function (node) {
-                        node_click(node, 'open');
-                    });
-                    $('#Component').find('em').addClass('selected');
+            } else if (name === 'BING') {
+                if (!$('.BING').find('em').hasClass('selected')) {
+                    MainScene.switchBase(true, 'bing');
+                    $('.BING').find('em').addClass('selected');
                 } else {
-                    $('.Component').parent().toArray().forEach(function (node) {
-                        node_click(node, 'close');
-                    });
-                    $('#Component').find('em').removeClass('selected');
+                    MainScene.switchBase(false, 'bing');
+                    $('.BING').find('em').removeClass('selected');
+                }
+            } else if (name === 'ComponentXHD') {
+                if (!$('.ComponentXHD').find('em').hasClass('selected')) {
+                    toggleFunc(globalScene.Mol.XHD, 'open');
+                } else {
+                    toggleFunc(globalScene.Mol.XHD, 'close');
+                }
+            } else if (name === 'DM' || name === 'JZ' || name === 'Com') {
+                var qh = url.split('_')[0];
+                var dt = globalScene.Mol[qh][name].models;
+                if (!$('#' + url).find('em').hasClass('selected')) {
+                    for (var x = 0; x < dt.length; x++) {
+                        toggleFunc(dt[x], 'open');
+                    }
+                    $('#' + url).find('em').addClass('selected');
+                } else {
+                    for (var x = 0; x < dt.length; x++) {
+                        toggleFunc(dt[x], 'close');
+                    }
+                    $('#' + url).find('em').removeClass('selected');
                 }
             } else {
-                node_click(this, 'single');
+                var qh = name.split('_')[0];//区划id
+                var na = name.split('_')[1];//节点类型（JZ,DM,Com）
+                var top_index = -1;//子节点父容器节点编号
+                var topNodeId = '';//子节点管控父节点（类型总开关）id
+                var models = null;
+                //获取模型类目列表
+                if (na.indexOf('DM') !== -1 || na.indexOf('JT') !== -1) {
+                    models = globalScene.Mol[qh].DM.models;
+                    top_index = globalScene.Mol[qh].DM.index;
+                    topNodeId = qh + "_" + "DM"
+                } else if (na.indexOf('JZ') !== -1) {
+                    models = globalScene.Mol[qh].JZ.models;
+                    top_index = globalScene.Mol[qh].JZ.index;
+                    topNodeId = qh + "_" + "JZ"
+                } else {
+                    models = globalScene.Mol[qh].Com.models;
+                    top_index = globalScene.Mol[qh].Com.index;
+                    topNodeId = qh + "_" + "Com"
+                }
+                //模型名称匹配
+                for (var y = 0; y < models.length; y++) {
+                    if (models[y].name === name) {
+                        if ($('.' + name).find('em').hasClass('selected')) {
+                            //子节点状态管控及图层管理
+                            toggleFunc(models[y], 'close');
+                            //父节点状态管控
+                            topNodeManage(top_index, topNodeId, 'close', models.length);
+                        } else {
+                            //子节点状态管控及图层管理
+                            toggleFunc(models[y], 'open');
+                            //父节点状态管控
+                            topNodeManage(top_index, topNodeId, 'open', models.length);
+                        }
+                    }
+                }
             }
         });
 
-        function node_click(node, status) {
-            var url = $(node).find('span').attr('id');
-            var name = $(node).find('span').attr('class');
-            // 点击三级开关
-            if (!url || !name) {
-                return;
+        function topNodeManage(top_index, topNodeId, op, mo_len) {
+            var parentId = 'dlayerTree' + top_index;
+            if (op === 'close') {
+                //全关父关
+                if ($('#' + parentId).find('span em[class="selected"]').length === 0) {
+                    $('#' + topNodeId).find('em').removeClass('selected');
+                }
+            } else if (op === 'open') {
+                //全开父开
+                if ($('#' + parentId).find('span em[class="selected"]').length === mo_len) {
+                    $('#' + topNodeId).find('em').addClass('selected');
+                }
             }
-            if (status === 'open') {
-                if (!$(node).find('span em').hasClass('selected')) {
-                    $(node).find('span em').addClass('selected');
-                    if ($(node).find('span').attr('class').indexOf('Component') > -1) {
+        }
+
+        function toggleFunc(model, op) {
+            var name = model.name;
+            var url = model.url;
+            switch (op) {
+                case "open":
+                    //排除已打开
+                    if (!$('.' + name).find('em').hasClass('selected')) {
+                        $('.' + name).find('em').addClass('selected');
                         MainScene.addModels([{
                             url: url, name: name
                         }], false);
-                    } else {
-                        MainScene.addModels([{
+                    }
+                    break;
+                case "close":
+                    //排除已关闭
+                    if ($('.' + name).find('em').hasClass('selected')) {
+                        $('.' + name).find('em').removeClass('selected');
+                        MainScene.removeModels([{
                             url: url, name: name
-                        }], true);
+                        }]);
                     }
-                }
-            } else if (status === 'close') {
-                $(node).find('span em').removeClass('selected');
-                MainScene.removeModels([{
-                    url: url, name: name
-                }]);
-            } else {
-                if (!$(node).find('span em').hasClass('selected')) {
-                    $(node).find('span em').addClass('selected');
-                    if ($(node).find('span').attr('class').indexOf('Component') > -1) {
-                        MainScene.addModels([{
-                            url: url, name: name
-                        }], false);
-                    } else {
-                        MainScene.addModels([{
-                            url: url, name: name
-                        }], true);
-                    }
-                } else {
-                    $(node).find('span em').removeClass('selected');
-                    MainScene.removeModels([{
-                        url: url, name: name
-                    }]);
-                }
-                if ($(node).siblings().find('span em[class="selected"]').length === $(node).siblings().length) {
-                    if ($(node).find('span').attr('class').indexOf('Build') > -1) {
-                        $('#Build').find('em').addClass('selected');
-                    } else {
-                        $('#Component').find('em').addClass('selected');
-                    }
-                } else if ($(node).siblings().find('span em[class="selected"]').length === 0) {
-                    if ($(node).find('span').attr('class').indexOf('Build') > -1) {
-                        $('#Build').find('em').removeClass('selected');
-                    } else {
-                        $('#Component').find('em').removeClass('selected');
-                    }
-                }
+                    break;
             }
         }
 
@@ -157,8 +205,48 @@ define(function (require) {
             'cursoropacitymax': 0.8,
             'mousescrollstep': 100
         });
-        $('.ComponentXHD').parent().click();
     };
+
+    function ModelOrganization(DM, JZ, Com, xzqh_meta, index_gl) {
+        var com_xhd = null;
+        for (var i = 0; i < DM.length; i++) {
+            var na = DM[i].name;
+            if (na.indexOf('_') === -1) {
+                com_xhd = DM[i];
+                continue;//排除信号灯
+            }
+            var qh = na.split('_')[0];
+            var meta = xzqh_meta[qh];
+            var tit = na.replace(qh, meta.mc).replace("DM", '地面').replace("JT", "交通");
+            meta.DM.models.push({name: na, url: DM[i].path + "/config"});
+            layerTree.add(index_gl++, meta.DM.index, tit +
+                '<span id="' + DM[i].path + "/config" + '" class="' + na + '"><em class="selected"></em></span>', '', '', '', 'images/layer.png', 'images/layer.png', false);
+        }
+        for (var j = 0; j < JZ.length; j++) {
+            var na = JZ[j].name;
+            var qh = na.split('_')[0];
+            var meta = xzqh_meta[qh];
+            var tit = na.replace(qh, meta.mc).replace("JZ", '');
+            meta.JZ.models.push({name: na, url: JZ[j].path + "/config"});
+            layerTree.add(index_gl++, meta.JZ.index, tit +
+                '<span id="' + JZ[j].path + "/config" + '" class="' + na + '"><em></em></span>', '', '', '', 'images/layer.png', 'images/layer.png', false);
+        }
+        for (var h = 0; h < Com.length; h++) {
+            var na = Com[h].name;
+            var qh = na.split('_')[0];
+            var meta = xzqh_meta[qh];
+            var tit = Config.ModelsScp[na.split('_')[1]];
+            meta.Com.models.push({name: na, url: Com[h].path + "/config"});
+            layerTree.add(index_gl++, meta.Com.index, tit +
+                '<span id="' + Com[h].path + "/config" + '" class="' + na + '"><em></em></span>', '', '', '', 'images/layer.png', 'images/layer.png', false
+            );
+        }
+        xzqh_meta.XHD = {index: index_gl, name: com_xhd.name, url: com_xhd.path + "/config"};
+        layerTree.add(index_gl++, 0,
+            '信号灯<span id="' + com_xhd.path + "/config" + '" class="' + com_xhd.name + '"><em class="selected"></em></span>', '', '', '', 'images/layer.png', 'images/layer.png', false);
+    }
+
+
     return {
         init: init
     }

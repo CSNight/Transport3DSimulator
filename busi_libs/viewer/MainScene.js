@@ -1,6 +1,5 @@
 define(function (require) {
     var Cesium = require("Cesium");
-    var Zlib = require("Zlib");
     var init = function (container, callback) {
         var viewer = new Cesium.Viewer(container, {
             geocoder: true
@@ -26,20 +25,10 @@ define(function (require) {
                         });
                         var carDynamiclayer = new Cesium.DynamicLayer3D(scene.context, Config.CarModelUrls);
                         var dynamic = scene.primitives.add(carDynamiclayer);
-                        globalScene = {
-                            scene: scene,
-                            primitive_dynamic: dynamic,
-                            Viewer: viewer,
-                            carDynamicLayer: carDynamiclayer,
-                            map: null,
-                            isSceneReady: true,
-                            LayerDic: {},
-                            models: {},
-                            baseMap: null,
-                            Lights_on: true,
-                            Pop_on: false,
-                            Interval: 1000
-                        };
+                        globalScene.scene = scene;
+                        globalScene.primitive_dynamic = dynamic;
+                        globalScene.Viewer = viewer;
+                        globalScene.carDynamicLayer = carDynamiclayer;
                         toolbar(viewer);
                         var ToolBar = require('busi_libs/plugins/ToolBar');
                         var BottomNav = require('busi_libs/plugins/BottomNav');
@@ -159,7 +148,9 @@ define(function (require) {
                     break;
                 default:
                     imageryProvider = new Cesium.TiandituImageryProvider({
-                        credit: new Cesium.Credit('f5a5b965118d9f64418ff38c6bcf25f3')
+                        credit: new Cesium.Credit('天地图全球影像服务     数据来源：国家地理信息公共服务平台 & 四川省测绘地理信息局'),
+                        token: '4a00a1dc5387b8ed8adba3374bd87e5e',
+                        mapStyle: Cesium.TiandituMapsStyle['IMG_C']
                     });
                     break;
             }

@@ -102,6 +102,14 @@
                     inputScript("jquery/jquery.datatables.min.js");
                     inputCSS("jquery/css/jquery.datatables.min.css");
                     break;
+                case 'jq-date':
+                    inputScript("jquery/jquery.datepick.js");
+                    inputCSS("jquery/css/jquery.datepick.css");
+                    break;
+                case 'dialog':
+                    inputScript("dialog/dialog.js");
+                    inputCSS("dialog/dialog.css");
+                    break;
                 case 'bootstrap':
                     inputScript("bootstrap/bootstrap.min.js");
                     inputCSS("bootstrap/css/bootstrap.min.css");
