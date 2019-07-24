@@ -28,7 +28,19 @@ define(function (require) {
                 var stateList = ownerGroup.stateList; // 状态信息列表
                 var state = stateList.get(pickedObject.id);
                 globalScene.Viewer.entities.removeById('tracked-entity');
-                if (!trackedEntity) {
+                if (!trackedEntity && state) {
+                    let j = 0;
+                    let len = Object.keys(state.description).length;
+                    for (let field in state.description) {
+                        if (j === 0) {
+                            var des = '<table class="cesium-infoBox-defaultTable"><tbody>' + '<tr><th>' + field + '</th><td>' + state.description[field] + '</td></tr>';
+                        } else if (j === len) {
+                            des += '<tr><th>' + field + '</th><td>' + state.description[field] + '</td></tr>' + "</tbody></table>";
+                        } else {
+                            des += '<tr><th>' + field + '</th><td>' + state.description[field] + '</td></tr>';
+                        }
+                        j++;
+                    }
                     trackedEntity = globalScene.Viewer.entities.add({
                         id: 'tracked-entity',
                         position: state.position,
@@ -36,20 +48,20 @@ define(function (require) {
                             pixelSize: 1,
                             show: true // 不能设为false
                         },
-
+                        description: des
                         //viewFrom: new Cesium.Cartesian3(-100, -150, 100) // 观察位置的偏移量
                     });
                     console.log([state.position])
-                    // globalScene.Viewer._selectedEntity = trackedEntity;
-                    // var selectionIndicatorViewModel = defined( globalScene.Viewer._selectionIndicator) ? globalScene.Viewer._selectionIndicator.viewModel : undefined;
-                    // if (defined(trackedEntity)) {
-                    //     if (defined(selectionIndicatorViewModel)) {
-                    //         selectionIndicatorViewModel.animateAppear();
-                    //     }
-                    // } else if (defined(selectionIndicatorViewModel)) {
-                    //     selectionIndicatorViewModel.animateDepart();
-                    // }
-                    // globalScene.Viewer._selectedEntityChanged.raiseEvent(trackedEntity);
+                    globalScene.Viewer._selectedEntity = trackedEntity;
+                    var selectionIndicatorViewModel = defined(globalScene.Viewer._selectionIndicator) ? globalScene.Viewer._selectionIndicator.viewModel : undefined;
+                    if (defined(trackedEntity)) {
+                        if (defined(selectionIndicatorViewModel)) {
+                            selectionIndicatorViewModel.animateAppear();
+                        }
+                    } else if (defined(selectionIndicatorViewModel)) {
+                        selectionIndicatorViewModel.animateDepart();
+                    }
+                    globalScene.Viewer._selectedEntityChanged.raiseEvent(trackedEntity);
                 } else {
                     trackedEntity.position = state.position;
                 }
