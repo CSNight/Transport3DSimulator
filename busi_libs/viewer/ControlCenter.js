@@ -16,7 +16,8 @@ define(function (require) {
         Lights_on: true,
         Pop_on: false,
         Interval: 1000,
-        stream_type: "stream"
+        stream_type: "stream",
+        speed_lim: 60
     };
     MainScene.init('cesiumContainer', function (e) {
         MainScene.switchBase(true, "");
@@ -25,6 +26,12 @@ define(function (require) {
         MeasureAll.init();
         AnalysisAll.init();
         controlAction();
+        Metro.notify.setup({container: $(".notify-container"), width: 300, distance: "10vh"});
+
+        $('#spr').on('input', function () {
+            $('#spi').text($(this).val());
+            globalScene.speed_lim = $(this).val();
+        })
     });
 
     function controlAction() {

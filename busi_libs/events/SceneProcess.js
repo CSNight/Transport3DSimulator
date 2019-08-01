@@ -32,6 +32,9 @@ define(function (require) {
                     let j = 0;
                     let len = Object.keys(state.description).length;
                     for (let field in state.description) {
+                        if(['ident','location', 'is_running', 'mileage', 'frame_id', 'car_class'].indexOf(field)!==-1){
+                            continue;
+                        }
                         if (j === 0) {
                             var des = '<table class="cesium-infoBox-defaultTable"><tbody>' + '<tr><th>' + field + '</th><td>' + state.description[field] + '</td></tr>';
                         } else if (j === len) {
@@ -51,7 +54,7 @@ define(function (require) {
                         description: des
                         //viewFrom: new Cesium.Cartesian3(-100, -150, 100) // 观察位置的偏移量
                     });
-                    console.log([state.position])
+                    console.log([state.position]);
                     globalScene.Viewer._selectedEntity = trackedEntity;
                     var selectionIndicatorViewModel = defined(globalScene.Viewer._selectionIndicator) ? globalScene.Viewer._selectionIndicator.viewModel : undefined;
                     if (defined(trackedEntity)) {

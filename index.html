@@ -12,10 +12,12 @@
     <link rel="stylesheet" href="js_libs/supermap-libs/iclient9-leaflet.css"/>
     <script type="text/javascript" include="elasticsearch,jq-nicescroll,dtree,moment,jq-date,echarts"
             src="js_libs/third-js-libs/include-trdlibs.js"></script>
+    <script type="text/javascript" src="js_libs/third-js-libs/metro/v4/js/metro.v4.js"></script>
     <script type="text/javascript" src="js_libs/base-libs/require.js"></script>
     <script src="busi_libs/utils/UrlConfig.js"></script>
 </head>
 <body class="loading">
+<div class="notify-container position-bottom"></div>
 <div class="map-container">
     <!-- 地图 -->
     <div id="cesiumContainer" class="scene-main"></div>
@@ -71,6 +73,13 @@
                 <td>伽马</td>
                 <td>
                     <input type="range" min="0" max="3" step="0.02" data-bind="value: gamma, valueUpdate: 'input'">
+                </td>
+            </tr>
+            <tr>
+                <td>超速警告km/h</td>
+                <td>
+                    <input id="spr" type="range" min="10" max="200" step="10" style="width: 120px !important;"
+                           data-bind=" valueUpdate: 'input'" value="60"><b id="spi">60</b>
                 </td>
             </tr>
             </tbody>

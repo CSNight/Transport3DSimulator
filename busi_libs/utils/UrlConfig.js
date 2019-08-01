@@ -5,8 +5,8 @@ var Config = {
     "vectorMap": "http://10.1.30.27:8090/iserver/services/map-ChinaAll/rest/maps/哈尔滨",
     "lightsData": "http://10.1.30.27:8090/iserver/services/data-LightsVector/rest/data",
     "theme": {
-        "dmcl_w": "http://10.1.30.27:8093/iserver/services/map-hgfz/rest/maps/dmcll_map1",
-        "dmcl_y": "http://10.1.30.27:8093/iserver/services/map-hgfz/rest/maps/dmcll_map"
+        "dmcl_w": "http://10.1.30.27:8090/iserver/services/map-hgfz/rest/maps/dmcll_map1",
+        "dmcl_y": "http://10.1.30.27:8090/iserver/services/map-hgfz/rest/maps/dmcll_map"
     },
     "scenesUrl": {
         "Base": "http://10.0.9.12:8090/iserver/services/3D-DM/rest/realspace",

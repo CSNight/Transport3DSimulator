@@ -72,7 +72,7 @@ define(function (require) {
             count_d: 0
         };
         var len = es_json.length;
-        if(globalScene.isMapOpen){
+        if (globalScene.isMapOpen) {
             ThemeProcess.updateData(es_json);
         }
 
@@ -155,6 +155,9 @@ define(function (require) {
         for (let key in data_flow) {
             let car_obj = data_flow[key];
             if (car_obj.hasOwnProperty("trajectory")) {
+                if (car_obj.speed > globalScene.speed_lim) {
+                    Metro.notify.create(car_obj.car_id + ": 时速: " + car_obj.speed + "km/h,已超速", '超速警告', {keepOpen: false});
+                }
                 let length = car_obj.trajectory.length;
                 if (length !== 0) {
                     car_obj.x = car_obj.trajectory[length - 1].x;
@@ -170,14 +173,12 @@ define(function (require) {
                         CarListPlugin.stream_update(globalScene.STREAM_CAR_LIST[car_obj.car_id]);
                         car_stat.count_o = car_stat.count_o + 1;
                     }
-                }else{
-                    if(globalScene.STREAM_CAR_LIST.hasOwnProperty(key)){
+                } else {
+                    if (globalScene.STREAM_CAR_LIST.hasOwnProperty(key)) {
                         delete globalScene.STREAM_CAR_LIST[key]
                     }
-
                 }
             }
-
         }
         return car_stat
     };

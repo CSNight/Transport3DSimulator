@@ -2289,6 +2289,10 @@ define('S3MTiles/Enum/ShadowType', function() {
     return Cesium['ShadowType'];
 });
 
+define('S3MTiles/Enum/SkeletonState', function() {
+    return Cesium['SkeletonState'];
+});
+
 define('S3MTiles/Enum/SplitDirection', function() {
     return Cesium['SplitDirection'];
 });
@@ -2301,8 +2305,24 @@ define('S3MTiles/Enum/VertexCompressOption', function() {
     return Cesium['VertexCompressOption'];
 });
 
+define('S3MTiles/Instance', function() {
+    return Cesium['Instance'];
+});
+
+define('S3MTiles/InstanceInfo', function() {
+    return Cesium['InstanceInfo'];
+});
+
 define('S3MTiles/InstanceSkeletonManager', function() {
     return Cesium['InstanceSkeletonManager'];
+});
+
+define('S3MTiles/InstanceTile', function() {
+    return Cesium['InstanceTile'];
+});
+
+define('S3MTiles/InstanceTilesLayer', function() {
+    return Cesium['InstanceTilesLayer'];
 });
 
 define('S3MTiles/MaterialPass', function() {
@@ -2383,6 +2403,14 @@ define('S3MTiles/S3MRegionEffect', function() {
 
 define('S3MTiles/S3MRenderStateCreator', function() {
     return Cesium['S3MRenderStateCreator'];
+});
+
+define('S3MTiles/S3MSkeleton', function() {
+    return Cesium['S3MSkeleton'];
+});
+
+define('S3MTiles/S3MSkeletonProcessor', function() {
+    return Cesium['S3MSkeletonProcessor'];
 });
 
 define('S3MTiles/S3MTextureManager', function() {
@@ -2557,6 +2585,10 @@ define('S3MTiles/shader/S3MTilesFragment', function() {
     return Cesium['S3MTilesFragment'];
 });
 
+define('S3MTiles/shader/S3MTilesFragmentRaster', function() {
+    return Cesium['S3MTilesFragmentRaster'];
+});
+
 define('S3MTiles/shader/S3MTilesLineShadowVectex', function() {
     return Cesium['S3MTilesLineShadowVectex'];
 });
@@ -2579,6 +2611,10 @@ define('S3MTiles/shader/S3MTilesShadowVolumeFP', function() {
 
 define('S3MTiles/shader/S3MTilesVectex', function() {
     return Cesium['S3MTilesVectex'];
+});
+
+define('S3MTiles/shader/S3MTilesVectexRaster', function() {
+    return Cesium['S3MTilesVectexRaster'];
 });
 
 define('S3MTiles/shader/ShadowAnalysisFp', function() {
@@ -3197,6 +3233,10 @@ define('Scene/ParticleEmitter', function() {
     return Cesium['ParticleEmitter'];
 });
 
+define('Scene/ParticlePostRenderer', function() {
+    return Cesium['ParticlePostRenderer'];
+});
+
 define('Scene/ParticleSystem', function() {
     return Cesium['ParticleSystem'];
 });
@@ -3251,6 +3291,10 @@ define('Scene/PointPrimitive', function() {
 
 define('Scene/PointPrimitiveCollection', function() {
     return Cesium['PointPrimitiveCollection'];
+});
+
+define('Scene/PolygonEmitter', function() {
+    return Cesium['PolygonEmitter'];
 });
 
 define('Scene/Polyline', function() {
@@ -4595,6 +4639,10 @@ define('Shaders/TransformFeedback/TransformFeedbackFp', function() {
 
 define('Shaders/TransformFeedback/VelocityFieldTransformFeedbackVp', function() {
     return Cesium['VelocityFieldTransformFeedbackVp'];
+});
+
+define('Shaders/VDMCompositionFS', function() {
+    return Cesium['VDMCompositionFS'];
 });
 
 define('Shaders/Vector3DTilePolylinesVS', function() {

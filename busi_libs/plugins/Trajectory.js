@@ -219,7 +219,9 @@ define(function () {
             polyline: {
                 positions: points,
                 width: 2,
-                material: Cesium.Color.RED
+                material: new Cesium.PolylineDashMaterialProperty({
+                    color: Cesium.Color.RED
+                })
             }
         });
         globalScene.carDynamicLayer.updateInterval = 500;

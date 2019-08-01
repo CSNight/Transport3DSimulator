@@ -179,3 +179,14 @@ input[type=date]::-webkit-clear-button{visibility:hidden;}
  .scroll-list span i.iconfont{font-size:13px;padding-right:2px;}
  .scroll-list span a{display:block;width:100%;height:100%;color:#fff;}
  .scroll-list i.icon-qiche{font-size:20px;position:relative;left:3px;}
+ .notify-container {background-color: transparent;position: fixed;top: 0;right: 0;display: -webkit-box;display: -ms-flexbox;display: flex;
+	 -webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;-ms-flex-wrap: wrap;flex-wrap: wrap;z-index: 1081;
+	 width: auto;float:right
+ }
+ .notify-container.position-left {right: auto;left: 0;}
+ .notify-container.position-top,
+ .notify-container.position-bottom {width: 300px;-webkit-box-orient: horizontal;-webkit-box-direction: normal;-ms-flex-direction: row;flex-direction: row;}
+ .notify-container.position-bottom {top: auto;bottom: 0;}
+ .notify {display: block;background-color: #ffffff;color: #1d1d1d;padding: 0.5rem;margin: 0.25rem;border: 1px solid #dfdfdf;cursor: pointer;}
+ .notify-title {font-size: 1rem;font-weight: 500;margin-bottom: 0.5rem;}
+ .notify-message {font-size: 0.9rem;font-weight: normal;}
