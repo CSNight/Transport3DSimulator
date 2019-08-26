@@ -79,7 +79,7 @@ define(function (require) {
                     destination: Cesium.Cartesian3.fromDegrees(loc[0], loc[1], 500)
                 });
                 $('.lp-static').html("车辆监控列表");
-                globalScene.SIM_CAR_LIST = new BASE.List();
+                globalScene.SIM_CAR_LIST = {};
                 globalScene.globalTimer = new Timer(1000, null);
                 globalScene.globalTimer.total_count = res["total_time"];
                 globalScene.globalTimer.file_id = res["id"];

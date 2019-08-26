@@ -2,11 +2,14 @@ define(function (require) {
     var init = function () {
         var ModelList = require('busi_libs/plugins/ModelList');
         var FlyPlugin = require('busi_libs/plugins/FlyPlugin');
+        var FlyManager = require('busi_libs/plugins/FlyManager');
         FlyPlugin.init();
         ModelList.init();
+        FlyManager.init();
         $('.rtop-tool ul li').on('click', function () {
             $('.measure-panel').hide();
             $('.analysis-panel').hide();
+            $('.fly-panel').hide();
             $('#toolbar').hide();
             if ($(this).hasClass('active')) {
                 $(this).removeClass('active');
@@ -16,11 +19,16 @@ define(function (require) {
             $('.rtop-tool ul li.layer').hasClass('active') ? $('.layer-panel').show() : $('.layer-panel').hide();
             $('.rtop-tool ul li.data').hasClass('active') ? $('.data-panel').show() : $('.data-panel').hide();
             $('.rtop-tool ul li.confScene').hasClass('active') ? $('#toolbar').show() : $('#toolbar').hide();
+            $('.rtop-tool ul li.fly').hasClass('active') ? $('.fly-panel').show() : $('.fly-panel').hide();
         });
         $('.rtop-t06').click(function () {
             var MainScene = require('busi_libs/viewer/MainScene');
             MainScene.flyToHome();
         });
+        $('.rtop-t08').click(function () {
+            $('#stopList').change();
+        });
+
         $('#toolOnOff').click(function () {
             if (!$(this).hasClass('rtop-t08')) {
                 $(this).removeClass('rtop-t09').addClass('rtop-t08');

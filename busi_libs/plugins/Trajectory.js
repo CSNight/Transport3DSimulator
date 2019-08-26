@@ -16,6 +16,8 @@ define(function () {
         $('.history-boxs').show();
         build_list();
         $("#his_stop").val(moment().format('YYYY-MM-DD HH:mm:ss'));
+        $('#his_start').val('2019-07-21 10:42:33');
+        $('#his_stop').val('2019-07-21 10:52:33');
     };
     let init_box = function () {
         let box_html = '<div class="box-head">历史轨迹查询<span id="close_his"><i class="iconfont icon-guanbi4"></i></span></div>';
@@ -53,15 +55,16 @@ define(function () {
         var html_date = '<div class="date_pick">';
         html_date += '<div class="c-datepicker-date-editor J-datepicker-range-between30 mt10">';
         html_date += '<i class="c-datepicker-range__icon kxiconfont icon-clock"></i>';
-        html_date += '<input placeholder="开始日期" name="" class="c-datepicker-data-input" value="" id="his_start">';
+        html_date += '<input placeholder="开始日期" name="" class="c-datepicker-data-input" value="2019-07-21 10:42:33" id="his_start">';
         html_date += '<span class="c-datepicker-range-separator">-</span>';
-        html_date += '<input placeholder="结束日期" name="" class="c-datepicker-data-input" value="" id="his_stop">';
+        html_date += '<input placeholder="结束日期" name="" class="c-datepicker-data-input" value="2019-07-21 10:52:33" id="his_stop">';
         html_date += '</div></div>';
         $('.his_time').append(html_date);
         $('.date_pick').datePicker({
             isRange: true,
-            between: 1,
+            between: 1
         });
+
     };
     let build_list = function () {
         $('.scroll-info').hide();
@@ -113,7 +116,7 @@ define(function () {
                     frame_index = frame_start = parseInt(key_st);
                     HIS_TIMER = new Timer(500, null);
                     HIS_TIMER.addEventListener('timer', tick);
-                    globalScene.globalTimer.addEventListener('timerComplete', function () {
+                    HIS_TIMER.addEventListener('timerComplete', function () {
                         $('.his_stop').click();
                         frame_index = frame_start;
                     });
@@ -134,7 +137,7 @@ define(function () {
                         if (len > 0) {
                             HIS_TIMER = new Timer(500, null);
                             HIS_TIMER.addEventListener('timer', tick);
-                            globalScene.globalTimer.addEventListener('timerComplete', function () {
+                            HIS_TIMER.addEventListener('timerComplete', function () {
                                 $('.his_stop').click();
                                 frame_index = frame_start;
                             });
@@ -187,6 +190,7 @@ define(function () {
         if (HIS_TIMER.file_id !== '') {
             globalScene.Viewer.entities.removeById(HIS_TIMER.file_id);
         }
+        globalScene.carDynamicLayer.clearState(Config.CarModelUrls[0],HIS_TIMER.file_id);
     };
     let clear = function () {
         $('.lp-info').html('');
@@ -205,6 +209,7 @@ define(function () {
         if (HIS_TIMER.file_id !== '') {
             globalScene.Viewer.entities.removeById(HIS_TIMER.file_id);
         }
+        globalScene.carDynamicLayer.clearState(Config.CarModelUrls[0],HIS_TIMER.file_id);
     };
     let getLine = function (markers, len, key_st) {
         let points = [];
@@ -236,7 +241,7 @@ define(function () {
             longitude: marker.x,
             latitude: marker.y,
             altitude: marker.z,
-            scale: new Cesium.Cartesian3(1, 1, 1),
+            scale: new Cesium.Cartesian3(1, 1, 1)
         });
         globalScene.carDynamicLayer.updateObjectWithModel(Config.CarModelUrls[0], [obj_state]);
         frame_index++;

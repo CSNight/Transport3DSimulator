@@ -103,6 +103,12 @@ define(function (require) {
                 } else {
                     toggleFunc(globalScene.Mol.XHD, 'close');
                 }
+            } else if (name.indexOf('TL_') !== -1) {
+                if (!$('.' + name).find('em').hasClass('selected')) {
+                    toggleFunc(globalScene.Mol[name], 'open');
+                } else {
+                    toggleFunc(globalScene.Mol[name], 'close');
+                }
             } else if (name === 'DM' || name === 'JZ' || name === 'Com') {
                 var qh = url.split('_')[0];
                 var dt = globalScene.Mol[qh][name].models;
@@ -209,11 +215,16 @@ define(function (require) {
 
     function ModelOrganization(DM, JZ, Com, xzqh_meta, index_gl) {
         var com_xhd = null;
+        var com_tl = [];
         for (var i = 0; i < DM.length; i++) {
             var na = DM[i].name;
             if (na.indexOf('_') === -1) {
                 com_xhd = DM[i];
                 continue;//排除信号灯
+            }
+            if (na.indexOf("TL") !== -1) {
+                com_tl.push(DM[i]);
+                continue;//排除铁路
             }
             var qh = na.split('_')[0];
             var meta = xzqh_meta[qh];
@@ -226,7 +237,7 @@ define(function (require) {
             var na = JZ[j].name;
             var qh = na.split('_')[0];
             var meta = xzqh_meta[qh];
-            var tit = na.replace(qh, meta.mc).replace("JZ", '');
+            var tit = na.replace(qh, meta.mc).replace("JZ_", '');
             meta.JZ.models.push({name: na, url: JZ[j].path + "/config"});
             layerTree.add(index_gl++, meta.JZ.index, tit +
                 '<span id="' + JZ[j].path + "/config" + '" class="' + na + '"><em></em></span>', '', '', '', 'images/layer.png', 'images/layer.png', false);
@@ -244,6 +255,13 @@ define(function (require) {
         xzqh_meta.XHD = {index: index_gl, name: com_xhd.name, url: com_xhd.path + "/config"};
         layerTree.add(index_gl++, 0,
             '信号灯<span id="' + com_xhd.path + "/config" + '" class="' + com_xhd.name + '"><em class="selected"></em></span>', '', '', '', 'images/layer.png', 'images/layer.png', false);
+        for (var k = 0; k < com_tl.length; k++) {
+            xzqh_meta[com_tl[k].name] = {index: index_gl++, name: com_tl[k].name, url: com_tl[k].path + "/config"};
+            let name = com_tl[k].name.replace('TL_', '铁路');
+            layerTree.add(index_gl++, 0,
+                name + '<span id="' + com_xhd.path + "/config" + '" class="' + com_tl[k].name + '"><em class="selected"></em></span>', '', '', '', 'images/layer.png', 'images/layer.png', false);
+        }
+
     }
 
 

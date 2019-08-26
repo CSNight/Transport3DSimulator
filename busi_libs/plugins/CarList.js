@@ -20,8 +20,7 @@ define(function (require) {
                 $(this).addClass("active");
                 $(this).siblings().removeClass('active');
             }
-            var index = globalScene.SIM_CAR_LIST.indexOfKey('car_id', BASE.base64encode($(this).attr('id')));
-            var car_model = globalScene.SIM_CAR_LIST.get(index);
+            var car_model = globalScene.SIM_CAR_LIST[BASE.base64encode($(this).attr('id'))];
             globalScene.Viewer.camera.flyTo({
                 destination: Cesium.Cartesian3.fromDegrees(car_model.pos.x, car_model.pos.y, car_model.pos.z + 100)
             });

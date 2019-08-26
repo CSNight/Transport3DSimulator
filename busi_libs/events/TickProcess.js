@@ -26,9 +26,9 @@ define(function (require) {
             for (var i = 0; i < Config.CarModelUrls.length; i++) {
                 urls[Config.CarModelUrls[i]] = [];
             }
-            for (var i = 0; i < globalScene.SIM_CAR_LIST.size(); i++) {
-                var st = globalScene.SIM_CAR_LIST.get(i).obj_state;
-                urls[globalScene.SIM_CAR_LIST.get(i).url].push(st);
+            for (var key in globalScene.SIM_CAR_LIST) {
+                var st = globalScene.SIM_CAR_LIST[key].obj_state;
+                urls[globalScene.SIM_CAR_LIST[key].url].push(st);
             }
 
             for (var key in urls) {
@@ -36,11 +36,11 @@ define(function (require) {
             }
             //车辆气泡标签控制
             if (globalScene.Pop_on) {
-                for (var i = 0; i < globalScene.SIM_CAR_LIST.size(); i++) {
-                    globalScene.Viewer.entities.removeById(globalScene.SIM_CAR_LIST.get(i).car_id);
+                for (var key in globalScene.SIM_CAR_LIST) {
+                    globalScene.Viewer.entities.removeById(globalScene.SIM_CAR_LIST[key].car_id);
                 }
-                for (var i = 0; i < globalScene.SIM_CAR_LIST.size(); i++) {
-                    var car_model = globalScene.SIM_CAR_LIST.get(i);
+                for (var key in globalScene.SIM_CAR_LIST) {
+                    var car_model = globalScene.SIM_CAR_LIST[key];
                     globalScene.Viewer.entities.add({
                         id: car_model.car_id,
                         position: Cesium.Cartesian3.fromDegrees(car_model.pos.x, car_model.pos.y, car_model.pos.z + 10),
@@ -56,8 +56,8 @@ define(function (require) {
                     });
                 }
             } else {
-                for (var i = 0; i < globalScene.SIM_CAR_LIST.size(); i++) {
-                    globalScene.Viewer.entities.removeById(globalScene.SIM_CAR_LIST.get(i).car_id);
+                for (var key in globalScene.SIM_CAR_LIST) {
+                    globalScene.Viewer.entities.removeById(globalScene.SIM_CAR_LIST[key].car_id);
                 }
             }
 
@@ -75,7 +75,8 @@ define(function (require) {
         if (globalScene.isMapOpen) {
             ThemeProcess.updateData(es_json);
         }
-
+        var up = [];
+        var ad = [];
         for (var k = 0; k < len; k++) {
             var _source = es_json[k]._source;
             if (_source.car_id === 'OTU4') {
@@ -84,35 +85,52 @@ define(function (require) {
             if (!_source.is_running || _source.speed < 0.5) {
                 continue;
             }
-            if (globalScene.SIM_CAR_LIST.indexOfKey("car_id", _source.car_id) === -1) {
+            if (!globalScene.SIM_CAR_LIST.hasOwnProperty(_source.car_id)) {
                 var new_car = new CarModelBase.CarModel(_source.car_class, _source);
-                globalScene.SIM_CAR_LIST.add(new_car);
-                CarListPlugin.sim_add(new_car);
+                globalScene.SIM_CAR_LIST[_source.car_id] = new_car;
+                ad.push(new_car);
                 car_stat.count_n = car_stat.count_n + 1;
             } else {
-                var car_index = globalScene.SIM_CAR_LIST.indexOfKey("car_id", _source.car_id);
-                var car_model = globalScene.SIM_CAR_LIST.get(car_index);
+                var car_model = globalScene.SIM_CAR_LIST[_source.car_id];
                 car_model.updateInfo(_source);
-                if (car_index < 0) {
-                    alert(_source.car_id);
-                }
-                CarListPlugin.sim_update(globalScene.SIM_CAR_LIST.get(car_index));
+                up.push(globalScene.SIM_CAR_LIST[_source.car_id]);
                 car_stat.count_o = car_stat.count_o + 1;
             }
         }
+        setTimeout(function () {
+            for (var i = 0; i < ad.length; i++) {
+                CarListPlugin.sim_add(ad[i]);
+            }
+            for (var i = 0; i < up.length; i++) {
+                CarListPlugin.sim_update(up[i]);
+            }
+        }, 200);
         //删除跑出
-        var dif = globalScene.SIM_CAR_LIST.diff(es_json, "car_id", "_source");
+        var dif = diff(es_json, "_source", "car_id");
         car_stat.count_d = dif.length;
         dif.forEach(function (cur) {
-            var index = globalScene.SIM_CAR_LIST.indexOfKey("car_id", cur);
-            var car_mo = globalScene.SIM_CAR_LIST.get(index);
+            var car_mo = globalScene.SIM_CAR_LIST[cur];
             globalScene.carDynamicLayer.clearState(car_mo.url, cur);
             CarListPlugin.sim_remove(car_mo);
             //删除移除车辆的气泡标签
             globalScene.Viewer.entities.removeById(car_mo.car_id);
-            globalScene.SIM_CAR_LIST.removeAt(index);
+            delete globalScene.SIM_CAR_LIST[cur];
         });
         return car_stat;
+
+        function diff(es_json, k, v) {
+            var dif = [];
+            var arr_tmp = [];
+            es_json.forEach(function (val) {
+                arr_tmp.push(val[k][v]);
+            });
+            for (var key in globalScene.SIM_CAR_LIST) {
+                if (arr_tmp.indexOf(globalScene.SIM_CAR_LIST[key][v]) === -1) {
+                    dif.push(globalScene.SIM_CAR_LIST[key][v])
+                }
+            }
+            return dif;
+        }
     };
 
     var TickStreamEvent = function (e) {

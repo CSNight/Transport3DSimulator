@@ -9,9 +9,9 @@ var Config = {
         "dmcl_y": "http://10.1.30.27:8090/iserver/services/map-hgfz/rest/maps/dmcll_map"
     },
     "scenesUrl": {
-        "Base": "http://10.0.9.12:8090/iserver/services/3D-DM/rest/realspace",
-        "Component": "http://10.0.9.12:8090/iserver/services/3D-Component/rest/realspace",
-        "JZ": "http://10.0.9.12:8090/iserver/services/3D-JZ/rest/realspace"
+        "Base": "http://localhost:8090/iserver/services/3D-DM/rest/realspace",
+        "Component": "http://localhost:8090/iserver/services/3D-Component/rest/realspace",
+        "JZ": "http://localhost:8090/iserver/services/3D-JZ/rest/realspace"
     },
     "destination": {
         "MyScene": {
@@ -49,7 +49,7 @@ var Config = {
         "NG": "南岗区",
         "DW": "道外区",
         "PF": "平房区",
-        "SB": "松北区",
+        "JB": "松北区",
         "XF": "香坊区"
     }
 };

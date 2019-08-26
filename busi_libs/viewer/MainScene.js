@@ -5,6 +5,8 @@ define(function (require) {
             geocoder: true
         });
 
+        var start = Cesium.JulianDate.fromDate(new Date(2019, 2, 25, 12));
+        viewer.clock.currentTime = start.clone();
         var scene = viewer.scene;
         var widget = viewer.cesiumWidget;
         try {
@@ -29,6 +31,8 @@ define(function (require) {
                         globalScene.primitive_dynamic = dynamic;
                         globalScene.Viewer = viewer;
                         globalScene.carDynamicLayer = carDynamiclayer;
+                        globalScene.carDynamicLayer.maxVisibleAltitude = 500;
+                        globalScene.carDynamicLayer.maxVisibleDistance = 2000;
                         toolbar(viewer);
                         var ToolBar = require('busi_libs/plugins/ToolBar');
                         var BottomNav = require('busi_libs/plugins/BottomNav');
