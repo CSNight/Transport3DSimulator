@@ -73,6 +73,7 @@ define(function () {
         if (globalScene.line_filter === 'all') {
             return;
         }
+        //初始化线路列表
         let cars = globalScene.LineCarMap[globalScene.line_filter];
         for (let i = 0; i < cars.length; i++) {
             let html_car = '<div class="scroll-box">';
@@ -92,6 +93,7 @@ define(function () {
             'cursoropacitymax': 0.8,
             'mousescrollstep': 100
         });
+        //查询按钮逻辑
         $('.find_his').unbind().click(function () {
             removeCurrent();
             let car_id = $(this).siblings().find('#his_car_id').text();
@@ -109,21 +111,30 @@ define(function () {
                 alert("暂不支持跨天查询,查询跨度最长3小时，请重新输入！");
                 return;
             }
+            //固定演示日期逻辑，后续删除
             if (time_st === '2019-07-21 10:42:33' && time_en === '2019-07-21 10:52:33' && car_id === '黑AR6970') {
                 $.get('resource/res.json', function (jsData) {
                     let len = jsData.poi_count;
                     let key_st = jsData.start_time;
                     frame_index = frame_start = parseInt(key_st);
+                    //初始化定时器
                     HIS_TIMER = new Timer(500, null);
+                    //添加tick逻辑
                     HIS_TIMER.addEventListener('timer', tick);
+                    //添加定时器播放终止事件
                     HIS_TIMER.addEventListener('timerComplete', function () {
                         $('.his_stop').click();
                         frame_index = frame_start;
                     });
+                    //起始时间戳
                     HIS_TIMER.start_timestamp = frame_start * 1000;
+                    //tick总数
                     HIS_TIMER.total_count = len;
+                    //timer标识
                     HIS_TIMER.file_id = guid();
+                    //轨迹点数据
                     his_markers = jsData.markers;
+                    //生成场景轨迹虚线
                     getLine(jsData.markers, len, key_st);
                     $('.his_text').text("历史轨迹：" + car_id);
                     $('.his_ctr').show();
@@ -178,6 +189,7 @@ define(function () {
         globalScene.carDynamicLayer.clearAll();
         HIS_TIMER.stop();
     };
+    //清空当前轨迹
     let removeCurrent = function () {
         $('.his_play').show();
         $('.his_stop').hide();
@@ -190,8 +202,9 @@ define(function () {
         if (HIS_TIMER.file_id !== '') {
             globalScene.Viewer.entities.removeById(HIS_TIMER.file_id);
         }
-        globalScene.carDynamicLayer.clearState(Config.CarModelUrls[0],HIS_TIMER.file_id);
+        globalScene.carDynamicLayer.clearState(Config.CarModelUrls[0], HIS_TIMER.file_id);
     };
+    //清空查询记录及页面
     let clear = function () {
         $('.lp-info').html('');
         frame_start = 0;
@@ -209,7 +222,7 @@ define(function () {
         if (HIS_TIMER.file_id !== '') {
             globalScene.Viewer.entities.removeById(HIS_TIMER.file_id);
         }
-        globalScene.carDynamicLayer.clearState(Config.CarModelUrls[0],HIS_TIMER.file_id);
+        globalScene.carDynamicLayer.clearState(Config.CarModelUrls[0], HIS_TIMER.file_id);
     };
     let getLine = function (markers, len, key_st) {
         let points = [];
@@ -234,6 +247,7 @@ define(function () {
             destination: Cesium.Cartesian3.fromDegrees(markers[key_st].x, markers[key_st].y, 100)
         });
     };
+    //小车状态更新
     let tick = function (e) {
         let marker = his_markers[frame_index];
         let obj_state = new Cesium.DynamicObjectState({

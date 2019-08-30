@@ -73,7 +73,7 @@ define(function (require) {
             }
             if (!url || !name) {
                 return;
-            } else if (name === 'ImageVector') {
+            } else if (name === 'ImageVector') {//矢量
                 if (!$('.ImageVector').find('em').hasClass('selected')) {
                     MainScene.addLayers([url]);
                     $('.ImageVector').find('em').addClass('selected');
@@ -81,7 +81,7 @@ define(function (require) {
                     MainScene.removeLayers([url]);
                     $('.ImageVector').find('em').removeClass('selected');
                 }
-            } else if (name === 'TDT') {
+            } else if (name === 'TDT') {//底图天地图
                 if (!$('.TDT').find('em').hasClass('selected')) {
                     MainScene.switchBase(true, '');
                     $('.TDT').find('em').addClass('selected');
@@ -89,7 +89,7 @@ define(function (require) {
                     MainScene.switchBase(false, '');
                     $('.TDT').find('em').removeClass('selected');
                 }
-            } else if (name === 'BING') {
+            } else if (name === 'BING') {//底图BING
                 if (!$('.BING').find('em').hasClass('selected')) {
                     MainScene.switchBase(true, 'bing');
                     $('.BING').find('em').addClass('selected');
@@ -97,13 +97,13 @@ define(function (require) {
                     MainScene.switchBase(false, 'bing');
                     $('.BING').find('em').removeClass('selected');
                 }
-            } else if (name === 'ComponentXHD') {
+            } else if (name === 'ComponentXHD') {//信号灯
                 if (!$('.ComponentXHD').find('em').hasClass('selected')) {
                     toggleFunc(globalScene.Mol.XHD, 'open');
                 } else {
                     toggleFunc(globalScene.Mol.XHD, 'close');
                 }
-            } else if (name.indexOf('TL_') !== -1) {
+            } else if (name.indexOf('TL_') !== -1) {//铁路
                 if (!$('.' + name).find('em').hasClass('selected')) {
                     toggleFunc(globalScene.Mol[name], 'open');
                 } else {
@@ -123,7 +123,7 @@ define(function (require) {
                     }
                     $('#' + url).find('em').removeClass('selected');
                 }
-            } else {
+            } else {//子节点
                 var qh = name.split('_')[0];//区划id
                 var na = name.split('_')[1];//节点类型（JZ,DM,Com）
                 var top_index = -1;//子节点父容器节点编号

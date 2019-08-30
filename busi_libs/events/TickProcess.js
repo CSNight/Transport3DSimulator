@@ -79,9 +79,6 @@ define(function (require) {
         var ad = [];
         for (var k = 0; k < len; k++) {
             var _source = es_json[k]._source;
-            if (_source.car_id === 'OTU4') {
-                console.log(_source)
-            }
             if (!_source.is_running || _source.speed < 0.5) {
                 continue;
             }
@@ -99,10 +96,10 @@ define(function (require) {
         }
         setTimeout(function () {
             for (var i = 0; i < ad.length; i++) {
-                CarListPlugin.sim_add(ad[i]);
+                //CarListPlugin.sim_add(ad[i]);
             }
             for (var i = 0; i < up.length; i++) {
-                CarListPlugin.sim_update(up[i]);
+                //CarListPlugin.sim_update(up[i]);
             }
         }, 200);
         //删除跑出

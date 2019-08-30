@@ -8,26 +8,28 @@ define(function (require) {
         primitive_dynamic: null,
         Viewer: null,
         carDynamicLayer: null,
-        LineCarMap: null,
+        LineCarMap: null,//公交线路车辆Map
         map: null,
         LayerDic: {},
         models: {},
         baseMap: null,
-        Lights_on: true,
-        Pop_on: false,
+        Lights_on: true,//信号灯全局FLag
+        Pop_on: false,//气泡全局FLag
         Interval: 1000,
         stream_type: "stream",
-        speed_lim: 60
+        speed_lim: 60//限速阈值
     };
     MainScene.init('cesiumContainer', function (e) {
         MainScene.switchBase(true, "");
+        //注册左键点击事件
         MainScene.sceneEventRegister("l_click", SceneProcess.LeftClick);
         init_plugin_stat();
+        //测量、分析控件初始化
         MeasureAll.init();
         AnalysisAll.init();
         controlAction();
+        //限速警告弹窗初始化
         Metro.notify.setup({container: $(".notify-container"), width: 300, distance: "10vh"});
-
         $('#spr').on('input', function () {
             $('#spi').text($(this).val());
             globalScene.speed_lim = $(this).val();

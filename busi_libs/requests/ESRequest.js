@@ -1,4 +1,5 @@
 define(function () {
+    //仿真轨迹查询条件构造
     var es_sim_request = function (startT, endT, sim_option) {
         if (startT > endT) {
             return;

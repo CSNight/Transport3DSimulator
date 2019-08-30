@@ -7,8 +7,8 @@ define(function (require) {
         }
         CarListPlugin.clear();
         if (globalScene.SIM_CAR_LIST) {
-            for (var i = 0; i < globalScene.SIM_CAR_LIST.size(); i++) {
-                globalScene.Viewer.entities.removeById(globalScene.SIM_CAR_LIST.get(i).car_id);
+            for (var key in globalScene.SIM_CAR_LIST) {
+                globalScene.Viewer.entities.removeById(globalScene.SIM_CAR_LIST[key].car_id);
             }
         }
         if (globalScene.STREAM_CAR_LIST) {

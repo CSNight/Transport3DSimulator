@@ -12,7 +12,7 @@ define(function (require) {
                 crs: L.CRS.EPSG3857,
                 attributionControl: false
             });
-
+            //鼠标移动事件-显示当前位置经纬度
             globalScene.map.addEventListener("mousemove", function (e) {
                 $('.latlng_control').html(BASE.parseFixed(e.latlng.lng, 6) + "," + BASE.parseFixed(e.latlng.lat, 6));
             });
@@ -44,6 +44,7 @@ define(function (require) {
                 return me._div;
             };
             theme_control.addTo(globalScene.map);
+            //宏观图层切换功能
             $('#theme_select').change(function () {
                 let index = $('#theme_select')[0].options.selectedIndex;
                 let map_theme = $('#theme_select')[0].options[index].value;

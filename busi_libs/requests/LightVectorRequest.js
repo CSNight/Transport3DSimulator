@@ -23,6 +23,7 @@ define(function (require) {
 
                 var features = serviceResult.result.features.features;
                 features.forEach(function (feature) {
+                    //过滤关闭的信号灯
                     if (feature.properties.ISOPEN === 'false') {
                         return;
                     }
@@ -35,13 +36,16 @@ define(function (require) {
                             z: coor[2]
                         });
                     });
+                    //信号灯红黄绿排序，根据灯位置点高度
                     coors.sort(function (a, b) {
                         return a.z > b.z ? 1 : -1;
                     });
                     var cycle = {};
+                    //构建信号灯周期Map
                     for (var i = 1; i < 13; i++) {
                         cycle["P" + i] = parseInt(feature.properties["P" + i]);
                     }
+                    //信号灯信息初始化
                     var info = {
                         cross_id: feature.properties.CROSS_ID,
                         light_id: feature.properties.LIGHT_ID,
@@ -56,6 +60,7 @@ define(function (require) {
                         cycle: cycle,
                         current_phase: "P" + feature.properties.INITPHASE
                     };
+                    //生成信息灯模型
                     var Light = new LightModelBase.LightModel(info);
                     globalScene.Lights_List.add(Light);
                 });

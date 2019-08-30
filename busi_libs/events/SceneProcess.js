@@ -44,6 +44,7 @@ define(function (require) {
                         }
                         j++;
                     }
+                    //跟踪
                     trackedEntity = globalScene.Viewer.entities.add({
                         id: 'tracked-entity',
                         position: state.position,
@@ -54,7 +55,7 @@ define(function (require) {
                         description: des
                         //viewFrom: new Cesium.Cartesian3(-100, -150, 100) // 观察位置的偏移量
                     });
-                    console.log([state.position]);
+                    //跟踪框选
                     globalScene.Viewer._selectedEntity = trackedEntity;
                     var selectionIndicatorViewModel = defined(globalScene.Viewer._selectionIndicator) ? globalScene.Viewer._selectionIndicator.viewModel : undefined;
                     if (defined(trackedEntity)) {

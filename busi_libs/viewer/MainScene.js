@@ -31,9 +31,8 @@ define(function (require) {
                         globalScene.primitive_dynamic = dynamic;
                         globalScene.Viewer = viewer;
                         globalScene.carDynamicLayer = carDynamiclayer;
-                        globalScene.carDynamicLayer.maxVisibleAltitude = 500;
-                        globalScene.carDynamicLayer.maxVisibleDistance = 2000;
                         toolbar(viewer);
+                        //工具条及底部导航初始化
                         var ToolBar = require('busi_libs/plugins/ToolBar');
                         var BottomNav = require('busi_libs/plugins/BottomNav');
                         ToolBar.init();
@@ -58,6 +57,7 @@ define(function (require) {
         }
     };
 
+    //球体亮度、饱和度、对比度调节控制功能初始化
     function toolbar(viewer) {
         var viewModel = {
             brightness: 0,
@@ -133,7 +133,7 @@ define(function (require) {
             }
         }
     };
-
+    //切换三维球底图
     var switchBaseMap = function (isShow, base_type) {
         if (isShow) {
             var imageryProvider = null;

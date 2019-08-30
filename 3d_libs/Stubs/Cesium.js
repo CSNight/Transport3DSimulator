@@ -2125,6 +2125,10 @@ define('Renderer/RenderbufferFormat', function() {
     return Cesium['RenderbufferFormat'];
 });
 
+define('Renderer/Renderer2D', function() {
+    return Cesium['Renderer2D'];
+});
+
 define('Renderer/RenderState', function() {
     return Cesium['RenderState'];
 });
@@ -3425,8 +3429,12 @@ define('Scene/QuadtreeTileProvider', function() {
     return Cesium['QuadtreeTileProvider'];
 });
 
-define('Scene/RasterVectorRender2D', function() {
-    return Cesium['RasterVectorRender2D'];
+define('Scene/RasterGeometryType', function() {
+    return Cesium['RasterGeometryType'];
+});
+
+define('Scene/RasterVectorCollection', function() {
+    return Cesium['RasterVectorCollection'];
 });
 
 define('Scene/ScanEffect', function() {
